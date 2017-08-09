@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Nikita Shumakov](https://up.htmlacademy.ru/javascript/10/user/305185).
-* Наставник: `Неизвестно`.
+* Наставник: [Alexandr Bolshov](https://up.htmlacademy.ru/javascript/10/user/179111).
 
 ---
 
