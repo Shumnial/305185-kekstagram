@@ -49,7 +49,7 @@ var someFunction = function (array) {
     element.querySelector('.picture-likes').textContent = photo.likes;
     fragment.appendChild(element);
   }
-  template.appendChild(fragment);
+  template.querySelector('.picture').appendChild(fragment);
 };
 
 someFunction(photoElement);
