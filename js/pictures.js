@@ -41,12 +41,12 @@ for (var i = 0; i <= 24; i++) {
 
 var someFunction = function (array) {
   var fragment = document.createDocumentFragment();
-  var template = document.querySelector('#picture-template').content.querySelector('.picture');
+  var template = document.querySelector('#picture-template').content;
   for (i = 0; i < 3; i++) {
     var element = template.cloneNode(true);
-    element.children[0].textContent = photo.url;
-    element.children[1][0].textContent = photo.comments;
-    element.children[1][1].textContent = photo.likes;
+    element.querySelector('img').textContent = photo.url;
+    element.querySelector('.picture-comments').textContent = photo.comments;
+    element.querySelector('.picture-likes').textContent = photo.likes;
     fragment.appendChild(element);
   }
   template.appendChild(fragment);
