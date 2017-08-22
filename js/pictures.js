@@ -42,11 +42,11 @@ for (var i = 0; i <= 24; i++) {
 var someFunction = function (array) {
   var fragment = document.createDocumentFragment();
   var template = document.querySelector('#picture-template').content;
-  for (i = 0; i < 3; i++) {
+  for (i = 0; i < photoElement.length; i++) {
     var element = template.cloneNode(true);
-    element.querySelector('img').textContent = photo.url;
-    element.querySelector('.picture-comments').textContent = photo.comments;
-    element.querySelector('.picture-likes').textContent = photo.likes;
+    element.querySelector('img').setAttribute('src', photoElement[i].url);
+    element.querySelector('.picture-comments').textContent = photoElement[i].comments;
+    element.querySelector('.picture-likes').textContent = photoElement[i].likes;
     fragment.appendChild(element);
   }
   template.querySelector('.picture').appendChild(fragment);
