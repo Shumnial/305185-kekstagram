@@ -65,13 +65,13 @@ showHideOverlay();
 
 var getPhotoDetails = function (array) {
   var fragment = document.createDocumentFragment();
-  var galleryBlock = document.querySelector('.gallery-overlay');
+  var galleryBlock = document.querySelector('.gallery-overlay-preview');
   var element = galleryBlock.cloneNode(true);
   element.querySelector('.gallery-overlay-image').setAttribute('src', photoElement[0].url);
   element.querySelector('.likes-count').textContent = photoElement[0].likes;
   element.querySelector('.comments-count').textContent = photoElement[0].comments.length;
   fragment.appendChild(element);
-  document.querySelector('.gallery-overlay-preview').appendChild(fragment);
+  document.querySelector('.gallery-overlay').replaceChild(fragment, galleryBlock);
 };
 
 getPhotoDetails(photoElement);
