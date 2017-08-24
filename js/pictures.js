@@ -29,7 +29,7 @@ var getRandomComment = function (array) {
   commentsNumber[0] = firstComment;
   var oneOrTwo = Math.floor(1 + Math.random() * 2);
   if (oneOrTwo === 2) {
-    var secondComment;
+    var secondComment = array[Math.floor(Math.random() * array.length)];
     while (secondComment === firstComment) {
       secondComment = array[Math.floor(Math.random() * array.length)];
     }
