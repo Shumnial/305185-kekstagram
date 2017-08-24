@@ -33,8 +33,8 @@ var getRandomComment = function (array) {
     while (secondComment === firstComment) {
       secondComment = array[Math.floor(Math.random() * array.length)];
     }
+    commentsNumber[1] = secondComment;
   }
-  commentsNumber[1] = secondComment;
   return commentsNumber;
 };
 
@@ -55,7 +55,7 @@ var getTemplate = function (array) {
   for (i = 0; i < photoElement.length; i++) {
     var element = template.cloneNode(true);
     element.querySelector('img').setAttribute('src', photoElement[i].url);
-    element.querySelector('.picture-comments').textContent = photoElement[i].comments;
+    element.querySelector('.picture-comments').textContent = photoElement[i].comments.length;
     element.querySelector('.picture-likes').textContent = photoElement[i].likes;
     fragment.appendChild(element);
   }
