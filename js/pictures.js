@@ -24,8 +24,12 @@ var getRandomLikes = function (min, max) {
 };
 
 
-var getRandomComment = function (min, max) {
-  return Math.floor(Math.random() * (max + 1 - min) + min);
+var getRandomComment = function (array) {
+  var commentsNumber = [];
+  for (var i = 0; i <= Math.floor(Math.random() * 2); i++) {
+    commentsNumber[i] = array[Math.floor(Math.random() * array.length)];
+  }
+  return commentsNumber;
 };
 
 var photoElement = [];
@@ -34,7 +38,7 @@ for (var i = 0; i <= 24; i++) {
   var photo = {
     url: 'photos/' + (i + 1) + '.jpg',
     likes: getRandomLikes(15, 200),
-    comments: comments[getRandomComment(0, comments.length - 1)]
+    comments: getRandomComment(comments)
   };
   photoElement[i] = photo;
 }
@@ -53,3 +57,11 @@ var someFunction = function (array) {
 };
 
 someFunction(photoElement);
+
+
+/*
+Ок, все работает, теперь можно перейти к сложному - генерации случайных комментариев в функции getRandomComment. Всего она должна решать следующие задачи (по наращиванию функционала):
+1. Возвращать комментарий, состоящий из одного или двух элементов массива comments
+2. Элементы из массива должны выбираться случайным образом
+3. Элементы массива не должны совпадать друг с другом
+*/
