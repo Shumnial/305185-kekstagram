@@ -49,7 +49,7 @@ for (var i = 0; i <= 24; i++) {
   photoElement[i] = photo;
 }
 
-var someFunction = function (array) {
+var getTemplate = function (array) {
   var fragment = document.createDocumentFragment();
   var template = document.querySelector('#picture-template').content;
   for (i = 0; i < photoElement.length; i++) {
@@ -62,12 +62,4 @@ var someFunction = function (array) {
   document.querySelector('.pictures').appendChild(fragment);
 };
 
-someFunction(photoElement);
-
-
-/*
-Ок, все работает, теперь можно перейти к сложному - генерации случайных комментариев в функции getRandomComment. Всего она должна решать следующие задачи (по наращиванию функционала):
-1. Возвращать комментарий, состоящий из одного или двух элементов массива comments
-2. Элементы из массива должны выбираться случайным образом
-3. Элементы массива не должны совпадать друг с другом
-*/
+getTemplate(photoElement);
