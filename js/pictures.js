@@ -18,7 +18,6 @@ var showHideOverlay = function () {
 
 showHideOverlay();
 
-
 var getRandomLikes = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min) + min);
 };
@@ -26,9 +25,16 @@ var getRandomLikes = function (min, max) {
 
 var getRandomComment = function (array) {
   var commentsNumber = [];
-  for (var i = 0; i <= Math.floor(Math.random() * 2); i++) {
-    commentsNumber[i] = array[Math.floor(Math.random() * array.length)];
+  var firstComment = array[Math.floor(Math.random() * array.length)];
+  commentsNumber[0] = firstComment;
+  var oneOrTwo = Math.floor(1 + Math.random() * 2);
+  if (oneOrTwo === 2) {
+    var secondComment;
+    while (secondComment === firstComment) {
+      secondComment = array[Math.floor(Math.random() * array.length)];
+    }
   }
+  commentsNumber[1] = secondComment;
   return commentsNumber;
 };
 
