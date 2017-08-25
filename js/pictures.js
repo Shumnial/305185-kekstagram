@@ -11,11 +11,11 @@ var COMMENTS = [
 var PHOTO_ELEMENTS = [];
 
 var getRandomInteger = function (min, max) {
-  Math.floor(Math.random() * (max + 1 - min) + min);
+  return Math.floor(Math.random() * (max + 1 - min) + min);
 };
 
 var getRandomArrayElement = function (array) {
-  return array[getRandomInteger(0, array.length)];
+  return array[getRandomInteger(0, array.length - 1)];
 };
 
 var getRandomComments = function (array) {
