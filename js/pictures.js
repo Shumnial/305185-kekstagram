@@ -8,15 +8,18 @@ var COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
+// Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min) + min);
 };
 
+// Получает случайный элемент массива
 var getRandomArrayElement = function (array) {
   return array[getRandomInteger(0, array.length - 1)];
 };
 
-var getRandomComments = function (array) {
+// Получает случайные комментарии в количестве от 1 до 2
+var getRandomComments = function () {
   var commentsNumber = [];
   var firstComment = getRandomArrayElement(COMMENTS);
   commentsNumber[0] = firstComment;
@@ -31,6 +34,7 @@ var getRandomComments = function (array) {
   return commentsNumber;
 };
 
+// Создает массив из 25 объектов, присваивает им случайное количество лайков и комментариев
 var getPhotoDetails = function () {
   var array = [];
   for (var i = 0; i <= 24; i++) {
@@ -43,7 +47,8 @@ var getPhotoDetails = function () {
   return array;
 };
 
-var getGalleryTemplate = function (array) {
+// Добавляет изображения галереи, информацию о лайках и комментариев из шаблона в HTML-разметку
+var drawPictures = function () {
   var fragment = document.createDocumentFragment();
   var template = document.querySelector('#picture-template').content;
   for (var i = 0; i < photoElements.length; i++) {
@@ -56,26 +61,22 @@ var getGalleryTemplate = function (array) {
   document.querySelector('.pictures').appendChild(fragment);
 };
 
+// Накладывает оверлей и открывает блок с изображением
 var showHideOverlay = function () {
   var uploadOverlay = document.querySelector('.upload-overlay');
   var galleryOverlay = document.querySelector('.gallery-overlay');
   uploadOverlay.classList.add('hidden');
   galleryOverlay.classList.remove('hidden');
 };
-
-var getPhotoTemplate = function (array) { // функция добавляет изображение и информацию о нем при увеличении фото
-  // создаем фрагмент, записываем его в переменную
-  // выбираем блок в HTML-коде, в котором будем менять разметку
+// функция отрисовывает изображение и информацию о нем при увеличении фото
+var drawGalleryOverlay = function (array) {
   var galleryBlock = document.querySelector('.gallery-overlay-preview');
-  // выбираем вложенный блок, заменяем значение его атрибута на значение свойства нулевого элемента массива (задаем атрибуту src тега img адрес изображения)
-  galleryBlock.querySelector('.gallery-overlay-image').setAttribute('src', array[0].url); //
-  // Аналогично предыдущему шагу, но указываем в текстовом виде количество лайков на фотографии
+  galleryBlock.querySelector('.gallery-overlay-image').setAttribute('src', array[0].url);
   galleryBlock.querySelector('.likes-count').textContent = array[0].likes;
-  // Аналогично, но в данном случае нам нужен не текст комментариев, а их количество, поэтому используем .length
   galleryBlock.querySelector('.comments-count').textContent = array[0].comments.length;
 };
 
 var photoElements = getPhotoDetails();
-getGalleryTemplate(photoElements);
+drawPictures(photoElements);
 showHideOverlay();
-getPhotoTemplate(photoElements);
+drawGalleryOverlay(photoElements);
