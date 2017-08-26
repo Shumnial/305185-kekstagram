@@ -41,7 +41,7 @@ var getPhotoDetails = function () {
     array[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       likes: getRandomInteger(15, 200),
-      comments: getRandomComments(COMMENTS)
+      comments: getRandomComments()
     };
   }
   return array;
@@ -77,6 +77,6 @@ var drawGalleryOverlay = function (array) {
 };
 
 var photoElements = getPhotoDetails();
-drawPictures(photoElements);
+drawPictures();
 showHideOverlay();
 drawGalleryOverlay(photoElements);
