@@ -48,14 +48,14 @@ var getPhotoDetails = function () {
 };
 
 // Добавляет изображения галереи, информацию о лайках и комментариев из шаблона в HTML-разметку
-var drawPictures = function () {
+var drawPictures = function (photoObjects) {
   var fragment = document.createDocumentFragment();
   var template = document.querySelector('#picture-template').content;
-  for (var i = 0; i < photoElements.length; i++) {
+  for (var i = 0; i < photoObjects.length; i++) {
     var element = template.cloneNode(true);
-    element.querySelector('img').setAttribute('src', photoElements[i].url);
-    element.querySelector('.picture-comments').textContent = photoElements[i].comments.length;
-    element.querySelector('.picture-likes').textContent = photoElements[i].likes;
+    element.querySelector('img').setAttribute('src', photoObjects[i].url);
+    element.querySelector('.picture-comments').textContent = photoObjects[i].comments.length;
+    element.querySelector('.picture-likes').textContent = photoObjects[i].likes;
     fragment.appendChild(element);
   }
   document.querySelector('.pictures').appendChild(fragment);
@@ -69,14 +69,14 @@ var showHideOverlay = function () {
   galleryOverlay.classList.remove('hidden');
 };
 // функция отрисовывает изображение и информацию о нем при увеличении фото
-var drawGalleryOverlay = function (array) {
+var drawGalleryOverlay = function (photoObjects) {
   var galleryBlock = document.querySelector('.gallery-overlay-preview');
-  galleryBlock.querySelector('.gallery-overlay-image').setAttribute('src', array[0].url);
-  galleryBlock.querySelector('.likes-count').textContent = array[0].likes;
-  galleryBlock.querySelector('.comments-count').textContent = array[0].comments.length;
+  galleryBlock.querySelector('.gallery-overlay-image').setAttribute('src', photoObjects[0].url);
+  galleryBlock.querySelector('.likes-count').textContent = photoObjects[0].likes;
+  galleryBlock.querySelector('.comments-count').textContent = photoObjects[0].comments.length;
 };
 
 var photoElements = getPhotoDetails();
-drawPictures();
+drawPictures(photoElements);
 showHideOverlay();
 drawGalleryOverlay(photoElements);
