@@ -31,20 +31,17 @@ var getRandomComments = function (array) {
   return commentsNumber;
 };
 
-var photoElements = [];
-var getPhotoDetails = function (array) {
+var getPhotoDetails = function () {
+  var array = [];
   for (var i = 0; i <= 24; i++) {
-    var photo = {
+    array[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       likes: getRandomInteger(15, 200),
       comments: getRandomComments(COMMENTS)
     };
-    array[i] = photo;
   }
+  return array;
 };
-
-getPhotoDetails(photoElements);
-
 
 var getGalleryTemplate = function (array) {
   var fragment = document.createDocumentFragment();
@@ -59,8 +56,6 @@ var getGalleryTemplate = function (array) {
   document.querySelector('.pictures').appendChild(fragment);
 };
 
-getGalleryTemplate(photoElements);
-
 var showHideOverlay = function () {
   var uploadOverlay = document.querySelector('.upload-overlay');
   var galleryOverlay = document.querySelector('.gallery-overlay');
@@ -68,25 +63,19 @@ var showHideOverlay = function () {
   galleryOverlay.classList.remove('hidden');
 };
 
-showHideOverlay();
-
 var getPhotoTemplate = function (array) { // функция добавляет изображение и информацию о нем при увеличении фото
   // создаем фрагмент, записываем его в переменную
-  var fragment = document.createDocumentFragment();
-  // выбираем блок в коде, в котором будем менять разметку
+  // выбираем блок в HTML-коде, в котором будем менять разметку
   var galleryBlock = document.querySelector('.gallery-overlay-preview');
-  // копируем из разметки блок с вложенными в него объектами, чтобы работать с ним в JS
-  var element = galleryBlock.cloneNode(true);
   // выбираем вложенный блок, заменяем значение его атрибута на значение свойства нулевого элемента массива (задаем атрибуту src тега img адрес изображения)
-  element.querySelector('.gallery-overlay-image').setAttribute('src', array[0].url); //
+  galleryBlock.querySelector('.gallery-overlay-image').setAttribute('src', array[0].url); //
   // Аналогично предыдущему шагу, но указываем в текстовом виде количество лайков на фотографии
-  element.querySelector('.likes-count').textContent = array[0].likes;
+  galleryBlock.querySelector('.likes-count').textContent = array[0].likes;
   // Аналогично, но в данном случае нам нужен не текст комментариев, а их количество, поэтому используем .length
-  element.querySelector('.comments-count').textContent = array[0].comments.length;
-  // Добавляем все элементы в наш фрагмент
-  fragment.appendChild(element);
-  // Выбираем родительский блок и заменяем в нем наших фрагментом .gallery-overlay-preview
-  document.querySelector('.gallery-overlay').replaceChild(fragment, galleryBlock);
+  galleryBlock.querySelector('.comments-count').textContent = array[0].comments.length;
 };
 
+var photoElements = getPhotoDetails();
+getGalleryTemplate(photoElements);
+showHideOverlay();
 getPhotoTemplate(photoElements);
