@@ -8,6 +8,9 @@ var COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
 // Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min) + min);
@@ -70,13 +73,53 @@ var showHideOverlay = function () {
 };
 // функция отрисовывает изображение и информацию о нем при увеличении фото
 var drawGalleryOverlay = function (photoObjects) {
-  var galleryBlock = document.querySelector('.gallery-overlay-preview');
-  galleryBlock.querySelector('.gallery-overlay-image').setAttribute('src', photoObjects[0].url);
-  galleryBlock.querySelector('.likes-count').textContent = photoObjects[0].likes;
-  galleryBlock.querySelector('.comments-count').textContent = photoObjects[0].comments.length;
+  var galleryOverlayPreview = document.querySelector('.gallery-overlay-preview');
+  galleryOverlayPreview.querySelector('.gallery-overlay-image').setAttribute('src', photoObjects[0].url);
+  galleryOverlayPreview.querySelector('.likes-count').textContent = photoObjects[0].likes;
+  galleryOverlayPreview.querySelector('.comments-count').textContent = photoObjects[0].comments.length;
 };
 
 var photoElements = getPhotoDetails();
 drawPictures(photoElements);
 showHideOverlay();
 drawGalleryOverlay(photoElements);
+
+var picture = document.querySelector('.picture');
+var galleryOverlay = document.querySelector('.gallery-overlay');
+var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
+
+var onPopupEscPress = function (evt) {
+  if (evt.keycode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  galleryOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  galleryOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+picture.addEventListener('click', function () {
+  openPopup();
+});
+
+picture.addEventListener('keydown', function (evt) {
+  if (evt.keycode === ENTER_KEYCODE) {
+    openPopup();
+  }
+});
+
+galleryOverlayClose.addEventListener('click', function () {
+  closePopup();
+});
+
+galleryOverlayClose.addEventListener('keydown', function (evt) {
+  if (evt.keycode === ENTER_KEYCODE) {
+    closePopup();
+  }
+});
