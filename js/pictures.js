@@ -8,8 +8,8 @@ var COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
+// var ESC_KEYCODE = 27;
+// var ENTER_KEYCODE = 13;
 
 // Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
@@ -84,6 +84,7 @@ drawPictures(photoElements);
 showHideOverlay();
 drawGalleryOverlay(photoElements);
 
+/*
 var picture = document.querySelector('.picture');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
@@ -122,4 +123,26 @@ galleryOverlayClose.addEventListener('keydown', function (evt) {
   if (evt.keycode === ENTER_KEYCODE) {
     closePopup();
   }
+});
+*/
+
+var picture = document.querySelector('.picture');
+var galleryOverlay = document.querySelector('.gallery-overlay');
+var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
+
+// Скрывает увеличенное изображение при нажатии ESC
+document.addEventListener('keydown', function (evt) {
+  if (evt.keycode === 27) {
+    galleryOverlay.classList.add('hidden');
+  }
+});
+
+// Закрывает увеличенное изображение при клике на крестик
+galleryOverlayClose.addEventListener('click', function () {
+  galleryOverlay.classList.add('hidden');
+});
+
+// Открывает увеличенное изображение при клике на уменьшенное
+picture.addEventListener('click', function () {
+  galleryOverlay.classList.remove('hidden');
 });
