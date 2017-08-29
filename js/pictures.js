@@ -122,7 +122,7 @@ pictures.addEventListener('click', function (evt) {
   if (evt.target === picture) {
     evt.target.getAttribute('src');
   } else {
-    evt.target.children[0].children[1].parentElement.children[0].getAttribute('src');
+    evt.target.parentElement.children[0].getAttribute('src');
   }
 });
 
