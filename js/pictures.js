@@ -37,7 +37,7 @@ var getRandomComments = function () {
   return commentsNumber;
 };
 
-// Создает массив из 25 объектов, присваивает им случайное количество лайков и комментариев
+// Создает массив из 25 объектов, присваивает свойствам объектов случайное значение лайков и комментариев
 var getPhotoDetails = function () {
   var array = [];
   for (var i = 0; i <= 24; i++) {
@@ -71,10 +71,11 @@ var showHideOverlay = function () {
   uploadOverlay.classList.add('hidden');
   galleryOverlay.classList.remove('hidden');
 };
-// функция отрисовывает изображение и информацию о нем при увеличении фото
+
+// Функция отрисовывает изображение и информацию о нем при увеличении фото
 var drawGalleryOverlay = function (photoObjects) {
   var galleryOverlayPreview = document.querySelector('.gallery-overlay-preview');
-  galleryOverlayPreview.querySelector('.gallery-overlay-image').setAttribute('src', photoObjects[0].url);
+  galleryOverlayPreview.querySelector('.gallery-overlay-image').setAttribute('src', photoObjects[objectNumber].url);
   galleryOverlayPreview.querySelector('.likes-count').textContent = photoObjects[0].likes;
   galleryOverlayPreview.querySelector('.comments-count').textContent = photoObjects[0].comments.length;
 };
@@ -85,54 +86,18 @@ showHideOverlay();
 drawGalleryOverlay(photoElements);
 
 /*
-var picture = document.querySelector('.picture');
-var galleryOverlay = document.querySelector('.gallery-overlay');
-var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
-
-var onPopupEscPress = function (evt) {
-  if (evt.keycode === ESC_KEYCODE) {
-    closePopup();
-  }
-};
-
-var openPopup = function () {
-  galleryOverlay.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscPress);
-};
-
-var closePopup = function () {
-  galleryOverlay.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscPress);
-};
-
-picture.addEventListener('click', function () {
-  openPopup();
-});
-
-picture.addEventListener('keydown', function (evt) {
-  if (evt.keycode === ENTER_KEYCODE) {
-    openPopup();
-  }
-});
-
-galleryOverlayClose.addEventListener('click', function () {
-  closePopup();
-});
-
-galleryOverlayClose.addEventListener('keydown', function (evt) {
-  if (evt.keycode === ENTER_KEYCODE) {
-    closePopup();
-  }
-});
+Давай слушать события на .pictures, там смотреть target и думать, как из этого таргета взять src, по этому src найти в массиве photoElements соответствующий объект и передать его в drawGalleryOverlay (которую, кстати, придется немного переписать, т.к. сейчас она сама берет из массива первый элемент)
+C использованием делегирования будем получать значения адреса и искать тот же объект в массиве. Да, и про комментарии над функциями не забывай. В программировании вообще большая часть падает на алгоритмы, планирование и документы. А уж само написание кода - это уже дело техники)
 */
 
+var pictures = document.querySelector('.pictures');
 var picture = document.querySelector('.picture');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
 // Скрывает увеличенное изображение при нажатии ESC
 document.addEventListener('keydown', function (evt) {
-  if (evt.keycode === 27) {
+  if (evt.keyCode === 27) {
     galleryOverlay.classList.add('hidden');
   }
 });
@@ -146,3 +111,19 @@ galleryOverlayClose.addEventListener('click', function () {
 picture.addEventListener('click', function () {
   galleryOverlay.classList.remove('hidden');
 });
+
+// Получает данные атрибута src нажатого изображения
+pictures.addEventListener('click', function (evt) {
+  return evt.target.getAttribute('src');
+});
+
+
+// С помощью цикла while находим элемент массива photoElements, объект которого (url) === атрибуту из обработчика. Цикл ищет // элемент массива и увеличивает его индекс на единицу до тех пор, пока не найдет подходящий.
+var getPhotoObject = function () {
+  var i = 0;
+  /* while (*Здесь должен быть результат верхнего обработчика* !== photoElements[i].url) {}
+    i++; */
+  return photoElements[i];
+};
+
+var objectNumber = getPhotoObject();
