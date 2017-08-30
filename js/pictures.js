@@ -86,15 +86,8 @@ showHideOverlay();
 drawGalleryOverlay(photoElements[0]);
 
 var pictures = document.querySelector('.pictures');
-var img = document.querySelector('.pictures').getElementsByTagName('img');
-var pictureStats = document.querySelector('.picture').querySelector('.picture-stats');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
-
-// Отменяет поведение ссылок по умолчанию
-pictures.addEventListener('click', function (evt) {
-  evt.preventDefault();
-});
 
 // Скрывает увеличенное изображение при нажатии ESC
 document.addEventListener('keydown', function (evt) {
@@ -115,21 +108,19 @@ pictures.addEventListener('click', function () {
 
 // Получает данные атрибута src при клике на img
 pictures.addEventListener('click', function (evt) {
-  var photoUrl;
-  if (evt.target === img) {
-    photoUrl = evt.target.getAttribute('src');
-  } else if (evt.target === pictureStats) {
-    photoUrl = evt.target.previousSibling.getAttribute('src');
+  evt.preventDefault();
+  if (evt.target.tagName === 'img') {
+    evt.target.getAttribute('src');
+  } else if (evt.target.classList.contains('picture-stats')) {
+    evt.target.parentNode.children[0].getAttribute('src');
   } else {
-    photoUrl = evt.target.parentNode.parentNode.children[0].getAttribute('src');
+    evt.target.parentNode.parentNode.children[0].getAttribute('src');
   }
-  return photoUrl;
+/*  var getPhotoObject = function (url) {
+    var i = 0;
+    while (url !== photoElements[i].getAttribute('url')) {
+      i++;
+    }
+    return photoUrl;
+  }; */
 });
-// С помощью цикла while находим элемент массива photoElements, объект которого (url) === атрибуту из обработчика. Цикл ищет // элемент массива и увеличивает его индекс на единицу до тех пор, пока не найдет подходящий.
-/* var getPhotoObject = function () {
-  var i = 0;
-  while (getPhotoUrl() !== photoElements[i].url) {
-    i++;
-  }
-  return photoElements[i];
-}; */
