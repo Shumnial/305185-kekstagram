@@ -85,13 +85,8 @@ drawPictures(photoElements);
 showHideOverlay();
 drawGalleryOverlay(photoElements[0]);
 
-/*
-Давай слушать события на .pictures, там смотреть target и думать, как из этого таргета взять src, по этому src найти в массиве photoElements соответствующий объект и передать его в drawGalleryOverlay (которую, кстати, придется немного переписать, т.к. сейчас она сама берет из массива первый элемент)
-C использованием делегирования будем получать значения адреса и искать тот же объект в массиве. Да, и про комментарии над функциями не забывай. В программировании вообще большая часть падает на алгоритмы, планирование и документы. А уж само написание кода - это уже дело техники)
-*/
-// var picture = document.querySelectorAll('.picture');
 var pictures = document.querySelector('.pictures');
-var img = document.querySelector('.picture').querySelector('img');
+var img = document.querySelector('.pictures').getElementsByTagName('img');
 var pictureStats = document.querySelector('.picture').querySelector('.picture-stats');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
@@ -119,21 +114,17 @@ pictures.addEventListener('click', function () {
 });
 
 // Получает данные атрибута src при клике на img
-var getPhotoUrl = function () {
-  pictures.addEventListener('click', function (evt) {
-    var photoUrl;
-    if (evt.target === img) {
-      photoUrl = evt.target.getAttribute('src');
-    } else if (evt.target === pictureStats) {
-      photoUrl = evt.target.previousSibling.getAttribute('src');
-    } else {
-      photoUrl = evt.target.parentNode.previousSibling.getAttribute('src');
-    }
-    return photoUrl;
-  });
-};
-
-getPhotoUrl();
+pictures.addEventListener('click', function (evt) {
+  var photoUrl;
+  if (evt.target === img) {
+    photoUrl = evt.target.getAttribute('src');
+  } else if (evt.target === pictureStats) {
+    photoUrl = evt.target.previousSibling.getAttribute('src');
+  } else {
+    photoUrl = evt.target.parentNode.parentNode.children[0].getAttribute('src');
+  }
+  return photoUrl;
+});
 // С помощью цикла while находим элемент массива photoElements, объект которого (url) === атрибуту из обработчика. Цикл ищет // элемент массива и увеличивает его индекс на единицу до тех пор, пока не найдет подходящий.
 /* var getPhotoObject = function () {
   var i = 0;
