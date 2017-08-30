@@ -123,6 +123,6 @@ pictures.addEventListener('click', function (evt) {
     while (url !== photoElements[i].getAttribute('url')) {
       i++;
     }
-    return photoUrl;
+    return url;
   }; */
 });
