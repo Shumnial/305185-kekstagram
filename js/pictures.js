@@ -109,13 +109,15 @@ pictures.addEventListener('click', function () {
 // Получает данные атрибута src при клике на img
 pictures.addEventListener('click', function (evt) {
   evt.preventDefault();
+  var photoUrl;
   if (evt.target.tagName === 'img') {
-    evt.target.getAttribute('src');
+    photoUrl = evt.target.getAttribute('src');
   } else if (evt.target.classList.contains('picture-stats')) {
-    evt.target.parentNode.children[0].getAttribute('src');
+    photoUrl = evt.target.parentNode.children[0].getAttribute('src');
   } else {
-    evt.target.parentNode.parentNode.children[0].getAttribute('src');
+    photoUrl = evt.target.parentNode.parentNode.children[0].getAttribute('src');
   }
+  return photoUrl;
 /*  var getPhotoObject = function (url) {
     var i = 0;
     while (url !== photoElements[i].getAttribute('url')) {
