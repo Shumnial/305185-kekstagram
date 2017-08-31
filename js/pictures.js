@@ -8,7 +8,7 @@ var COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-// var ESC_KEYCODE = 27;
+var ESC_KEYCODE = 27;
 // var ENTER_KEYCODE = 13;
 
 // Получает случайное число от min до max
@@ -90,7 +90,7 @@ var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
 // Скрывает увеличенное изображение при нажатии ESC
 document.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === 27) {
+  if (evt.keyCode === ESC_KEYCODE) {
     galleryOverlay.classList.add('hidden');
   }
 });
@@ -100,8 +100,10 @@ galleryOverlayClose.addEventListener('click', function () {
   galleryOverlay.classList.add('hidden');
 });
 
+// Отменяет привычное поведение ссылок
 // Открывает увеличенное изображение при клике на уменьшенное
 // Получает данные атрибута src при клике на img
+// Сравнивает url IMG и src
 pictures.addEventListener('click', function (evt) {
   galleryOverlay.classList.remove('hidden');
   var target = evt.target;
@@ -109,7 +111,12 @@ pictures.addEventListener('click', function (evt) {
   while (target !== pictures) {
     if (target.tagName === 'IMG') {
       var photoUrl = target.getAttribute('src');
-    } target = target.parentNode;
+    } else if (target.classList.contains('picture-stats')) {
+      photoUrl = target.parentNode.children[0].getAttribute('src');
+    } else if (target.classList.contains('picture-stat')) {
+      photoUrl = target.parentNode.parentNode.children[0].getAttribute('src');
+    }
+    target = target.parentNode;
   }
   drawGalleryOverlay(getPhotoObject(photoUrl));
 });
@@ -122,13 +129,3 @@ var getPhotoObject = function (url) {
   }
   return photoElements[i];
 };
-
-/*  var photoUrl;
-  if (evt.target.tagName === 'IMG') {
-    photoUrl = evt.target.getAttribute('src');
-  } else if (evt.target.classList.contains('picture-stats')) {
-    photoUrl = evt.target.parentNode.children[0].getAttribute('src');
-  } else {
-    photoUrl = evt.target.parentNode.parentNode.children[0].getAttribute('src');
-  }
-  return photoUrl; */
