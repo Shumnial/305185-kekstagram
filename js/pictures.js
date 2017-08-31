@@ -103,21 +103,14 @@ galleryOverlayClose.addEventListener('click', function () {
 // Отменяет привычное поведение ссылок
 // Открывает увеличенное изображение при клике на уменьшенное
 // Получает данные атрибута src при клике на img
-// Сравнивает url IMG и src
 pictures.addEventListener('click', function (evt) {
   galleryOverlay.classList.remove('hidden');
   var target = evt.target;
   evt.preventDefault();
-  while (target !== pictures) {
-    if (target.tagName === 'IMG') {
-      var photoUrl = target.getAttribute('src');
-    } else if (target.classList.contains('picture-stats')) {
-      photoUrl = target.parentNode.children[0].getAttribute('src');
-    } else if (target.classList.contains('picture-stat')) {
-      photoUrl = target.parentNode.parentNode.children[0].getAttribute('src');
-    }
+  while (!target.classList.contains('picture')) {
     target = target.parentNode;
   }
+  var photoUrl = target.children[0].getAttribute('src');
   drawGalleryOverlay(getPhotoObject(photoUrl));
 });
 
