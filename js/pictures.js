@@ -107,22 +107,34 @@ pictures.addEventListener('click', function () {
 });
 
 // Получает данные атрибута src при клике на img
-pictures.addEventListener('click', function (evt) {
+var getPictureUrl = function (evt) {
+  var target = evt.target;
   evt.preventDefault();
-  var photoUrl;
-  if (evt.target.tagName === 'img') {
+  while (target !== pictures) {
+    if (target.tagName === 'IMG') {
+      target.getAttribute('src');
+    } else {
+      target = target.parentNode;
+    }
+  }
+  return;
+};
+
+pictures.addEventListener('click', getPictureUrl);
+/*  var photoUrl;
+  if (evt.target.tagName === 'IMG') {
     photoUrl = evt.target.getAttribute('src');
   } else if (evt.target.classList.contains('picture-stats')) {
     photoUrl = evt.target.parentNode.children[0].getAttribute('src');
   } else {
     photoUrl = evt.target.parentNode.parentNode.children[0].getAttribute('src');
   }
-  return photoUrl;
+  return photoUrl; */
+
 /*  var getPhotoObject = function (url) {
-    var i = 0;
-    while (url !== photoElements[i].getAttribute('url')) {
-      i++;
-    }
-    return url;
-  }; */
-});
+  var i = 0;
+  while (url !== photoElements[i].getAttribute('url')) {
+    i++;
+  }
+  return url;
+}; */
