@@ -83,7 +83,6 @@ var drawGalleryOverlay = function (photoObjects) {
 
 var photoElements = getPhotoDetails();
 drawPictures(photoElements);
-drawGalleryOverlay(photoElements[0]);
 
 var pictures = document.querySelector('.pictures');
 var galleryOverlay = document.querySelector('.gallery-overlay');
@@ -103,7 +102,6 @@ galleryOverlayClose.addEventListener('click', function () {
 
 // Открывает увеличенное изображение при клике на уменьшенное
 // Получает данные атрибута src при клике на img
-
 pictures.addEventListener('click', function (evt) {
   galleryOverlay.classList.remove('hidden');
   var target = evt.target;
@@ -111,12 +109,9 @@ pictures.addEventListener('click', function (evt) {
   while (target !== pictures) {
     if (target.tagName === 'IMG') {
       var photoUrl = target.getAttribute('src');
-      return;
-    } else {
-      target = target.parentNode;
-    }
+    } target = target.parentNode;
   }
-  getPhotoObject(photoUrl);
+  drawGalleryOverlay(getPhotoObject(photoUrl));
 });
 
 // Сравниваем полученный url со значением свойства объекта
