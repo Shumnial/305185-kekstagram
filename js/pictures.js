@@ -95,31 +95,36 @@ var onPhotoEscPress = function (evt) {
   }
 };
 
+// Функция открытия фото. Убирает класс hidden карточке с фотографией и добавляет обработчик закрытия на ESC
 var openPhoto = function (evt) {
   galleryOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onPhotoEscPress);
 };
 
+// Функция закрытия фото. Добавляет класс hidden карточке и снимает обработчик закрытия на ESC
 var closePhoto = function (evt) {
   galleryOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onPhotoEscPress);
 };
 
+// Обработчик открытия фото на клик
 pictures.addEventListener('click', function () {
   openPhoto();
 });
 
+// Обработчик открытия фото на ENTER, когда фото в фокусе
 pictures.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPhoto();
   }
 });
 
-// Закрывает увеличенное изображение при клике на крестик
+// Обработчик закрытия фото на клик
 galleryOverlayClose.addEventListener('click', function () {
   closePhoto();
 });
 
+// Обработчик закрытия фото на ENTER, когда "крестик" в фокусе
 galleryOverlayClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closePhoto();
