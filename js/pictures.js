@@ -107,20 +107,29 @@ pictures.addEventListener('click', function () {
 });
 
 // Получает данные атрибута src при клике на img
-var getPictureUrl = function (evt) {
+
+pictures.addEventListener('click', function (evt) {
   var target = evt.target;
   evt.preventDefault();
   while (target !== pictures) {
     if (target.tagName === 'IMG') {
-      target.getAttribute('src');
+      var photoUrl = target.getAttribute('src');
     } else {
       target = target.parentNode;
     }
   }
-  return;
+  return photoUrl;
+});
+
+// Сравниваем полученный url и со значением свойства объекта
+var getPhotoObject = function (url) {
+  var i = 0;
+  while (url !== photoElements[i].url) {
+    i++;
+  }
+  return photoElements[i];
 };
 
-pictures.addEventListener('click', getPictureUrl);
 /*  var photoUrl;
   if (evt.target.tagName === 'IMG') {
     photoUrl = evt.target.getAttribute('src');
@@ -130,11 +139,3 @@ pictures.addEventListener('click', getPictureUrl);
     photoUrl = evt.target.parentNode.parentNode.children[0].getAttribute('src');
   }
   return photoUrl; */
-
-/*  var getPhotoObject = function (url) {
-  var i = 0;
-  while (url !== photoElements[i].getAttribute('url')) {
-    i++;
-  }
-  return url;
-}; */
