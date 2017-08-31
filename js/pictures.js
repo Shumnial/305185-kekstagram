@@ -121,14 +121,14 @@ pictures.addEventListener('click', function (evt) {
   return photoUrl;
 });
 
-// Сравниваем полученный url и со значением свойства объекта
-var getPhotoObject = function (url) {
+// Сравниваем полученный url со значением свойства объекта
+/* var getPhotoObject = function (url) {
   var i = 0;
   while (url !== photoElements[i].url) {
     i++;
   }
   return photoElements[i];
-};
+}; */
 
 /*  var photoUrl;
   if (evt.target.tagName === 'IMG') {
