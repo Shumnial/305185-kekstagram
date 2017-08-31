@@ -74,6 +74,7 @@ var showHideOverlay = function () {
 
 // Функция отрисовывает изображение и информацию о нем при увеличении фото
 var drawGalleryOverlay = function (photoObjects) {
+  showHideOverlay();
   var galleryOverlayPreview = document.querySelector('.gallery-overlay-preview');
   galleryOverlayPreview.querySelector('.gallery-overlay-image').setAttribute('src', photoObjects.url);
   galleryOverlayPreview.querySelector('.likes-count').textContent = photoObjects.likes;
@@ -82,7 +83,6 @@ var drawGalleryOverlay = function (photoObjects) {
 
 var photoElements = getPhotoDetails();
 drawPictures(photoElements);
-showHideOverlay();
 drawGalleryOverlay(photoElements[0]);
 
 var pictures = document.querySelector('.pictures');
@@ -102,33 +102,31 @@ galleryOverlayClose.addEventListener('click', function () {
 });
 
 // Открывает увеличенное изображение при клике на уменьшенное
-pictures.addEventListener('click', function () {
-  galleryOverlay.classList.remove('hidden');
-});
-
 // Получает данные атрибута src при клике на img
 
 pictures.addEventListener('click', function (evt) {
+  galleryOverlay.classList.remove('hidden');
   var target = evt.target;
   evt.preventDefault();
   while (target !== pictures) {
     if (target.tagName === 'IMG') {
       var photoUrl = target.getAttribute('src');
+      return;
     } else {
       target = target.parentNode;
     }
   }
-  return photoUrl;
+  getPhotoObject(photoUrl);
 });
 
 // Сравниваем полученный url со значением свойства объекта
-/* var getPhotoObject = function (url) {
+var getPhotoObject = function (url) {
   var i = 0;
   while (url !== photoElements[i].url) {
     i++;
   }
   return photoElements[i];
-}; */
+};
 
 /*  var photoUrl;
   if (evt.target.tagName === 'IMG') {
