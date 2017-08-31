@@ -9,7 +9,7 @@ var COMMENTS = [
 ];
 
 var ESC_KEYCODE = 27;
-// var ENTER_KEYCODE = 13;
+var ENTER_KEYCODE = 13;
 
 // Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
@@ -89,16 +89,43 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
 // Скрывает увеличенное изображение при нажатии ESC
-document.addEventListener('keydown', function (evt) {
+var onPhotoEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    galleryOverlay.classList.add('hidden');
+    closePhoto();
+  }
+};
+
+var openPhoto = function (evt) {
+  galleryOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onPhotoEscPress);
+};
+
+var closePhoto = function (evt) {
+  galleryOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', onPhotoEscPress);
+};
+
+pictures.addEventListener('click', function () {
+  openPhoto();
+});
+
+pictures.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPhoto();
   }
 });
 
 // Закрывает увеличенное изображение при клике на крестик
 galleryOverlayClose.addEventListener('click', function () {
-  galleryOverlay.classList.add('hidden');
+  closePhoto();
 });
+
+galleryOverlayClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePhoto();
+  }
+});
+
 
 // Отменяет привычное поведение ссылок
 // Открывает увеличенное изображение при клике на уменьшенное
