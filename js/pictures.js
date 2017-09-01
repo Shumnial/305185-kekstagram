@@ -10,6 +10,7 @@ var COMMENTS = [
 
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var OBJECTS_AMOUNT = 24;
 
 // Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
@@ -23,31 +24,31 @@ var getRandomArrayElement = function (array) {
 
 // Получает случайные комментарии в количестве от 1 до 2
 var getRandomComments = function () {
-  var commentsNumber = [];
+  var commentCounts = [];
   var firstComment = getRandomArrayElement(COMMENTS);
-  commentsNumber[0] = firstComment;
+  commentCounts[0] = firstComment;
   var oneOrTwo = getRandomInteger(1, 2);
   if (oneOrTwo === 2) {
     var secondComment = getRandomArrayElement(COMMENTS);
     while (secondComment === firstComment) {
       secondComment = getRandomArrayElement(COMMENTS);
     }
-    commentsNumber[1] = secondComment;
+    commentCounts[1] = secondComment;
   }
-  return commentsNumber;
+  return commentCounts;
 };
 
 // Создает массив из 25 объектов, присваивает свойствам объектов случайное значение лайков и комментариев
 var getPhotoDetails = function () {
-  var array = [];
-  for (var i = 0; i <= 24; i++) {
-    array[i] = {
+  var photoObjects = [];
+  for (var i = 0; i <= OBJECTS_AMOUNT; i++) {
+    photoObjects[i] = {
       url: 'photos/' + (i + 1) + '.jpg',
       likes: getRandomInteger(15, 200),
       comments: getRandomComments()
     };
   }
-  return array;
+  return photoObjects;
 };
 
 // Добавляет изображения галереи, информацию о лайках и комментариев из шаблона в HTML-разметку
@@ -64,21 +65,14 @@ var drawPictures = function (photoObjects) {
   document.querySelector('.pictures').appendChild(fragment);
 };
 
-// Накладывает оверлей и открывает блок с изображением
-var showHideOverlay = function () {
-  var uploadOverlay = document.querySelector('.upload-overlay');
-  var galleryOverlay = document.querySelector('.gallery-overlay');
-  uploadOverlay.classList.add('hidden');
-  galleryOverlay.classList.remove('hidden');
-};
-
+var galleryOverlayImage = document.querySelector('.gallery-overlay-image');
+var galleryLikesCount = document.querySelector('.likes-count');
+var galleryCommentsCount = document.querySelector('.comments-count');
 // Функция отрисовывает изображение и информацию о нем при увеличении фото
 var drawGalleryOverlay = function (photoObjects) {
-  showHideOverlay();
-  var galleryOverlayPreview = document.querySelector('.gallery-overlay-preview');
-  galleryOverlayPreview.querySelector('.gallery-overlay-image').setAttribute('src', photoObjects.url);
-  galleryOverlayPreview.querySelector('.likes-count').textContent = photoObjects.likes;
-  galleryOverlayPreview.querySelector('.comments-count').textContent = photoObjects.comments.length;
+  galleryOverlayImage.setAttribute('src', photoObjects.url);
+  galleryLikesCount.textContent = photoObjects.likes;
+  galleryCommentsCount.textContent = photoObjects.comments.length;
 };
 
 var photoElements = getPhotoDetails();
@@ -107,11 +101,6 @@ var closePhoto = function (evt) {
   document.removeEventListener('keydown', onPhotoEscPress);
 };
 
-// Обработчик открытия фото на клик
-pictures.addEventListener('click', function () {
-  openPhoto();
-});
-
 // Обработчик открытия фото на ENTER, когда фото в фокусе
 pictures.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
@@ -131,12 +120,11 @@ galleryOverlayClose.addEventListener('keydown', function (evt) {
   }
 });
 
-
 // Отменяет привычное поведение ссылок
 // Открывает увеличенное изображение при клике на уменьшенное
 // Получает данные атрибута src при клике на img
 pictures.addEventListener('click', function (evt) {
-  galleryOverlay.classList.remove('hidden');
+  openPhoto();
   var target = evt.target;
   evt.preventDefault();
   while (!target.classList.contains('picture')) {
