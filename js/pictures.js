@@ -128,13 +128,13 @@ var onPhotoClick = function (evt) {
 };
 
 // Обработчик открытия фото на ENTER, когда фото в фокусе
-pictures.addEventListener('keycode', onPhotoEnterPress);
+pictures.addEventListener('keydown', onPhotoEnterPress);
 
 // Обработчик закрытия фото на клик по крестику
 galleryOverlayClose.addEventListener('click', closePhoto);
 
 // Обработчик закрытия фото на ENTER, когда "крестик" в фокусе
-galleryOverlayClose.addEventListener('keycode', onCrossEnterPress);
+galleryOverlayClose.addEventListener('keydown', onCrossEnterPress);
 
 // Отменяет привычное поведение ссылок
 // Открывает увеличенное изображение при клике на уменьшенное
