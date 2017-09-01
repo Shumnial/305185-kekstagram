@@ -68,6 +68,7 @@ var drawPictures = function (photoObjects) {
 var galleryOverlayImage = document.querySelector('.gallery-overlay-image');
 var galleryLikesCount = document.querySelector('.likes-count');
 var galleryCommentsCount = document.querySelector('.comments-count');
+
 // Функция отрисовывает изображение и информацию о нем при увеличении фото
 var drawGalleryOverlay = function (photoObjects) {
   galleryOverlayImage.setAttribute('src', photoObjects.url);
@@ -82,6 +83,18 @@ var pictures = document.querySelector('.pictures');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
+// Функция открытия фото. Убирает класс hidden карточке с фотографией и добавляет обработчик закрытия на ESC
+var openPhoto = function () {
+  galleryOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onPhotoEscPress);
+};
+
+// Функция закрытия фото. Добавляет класс hidden карточке и снимает обработчик закрытия на ESC
+var closePhoto = function () {
+  galleryOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', onPhotoEscPress);
+};
+
 // Скрывает увеличенное изображение при нажатии ESC
 var onPhotoEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -89,41 +102,21 @@ var onPhotoEscPress = function (evt) {
   }
 };
 
-// Функция открытия фото. Убирает класс hidden карточке с фотографией и добавляет обработчик закрытия на ESC
-var openPhoto = function (evt) {
-  galleryOverlay.classList.remove('hidden');
-  document.addEventListener('keydown', onPhotoEscPress);
-};
-
-// Функция закрытия фото. Добавляет класс hidden карточке и снимает обработчик закрытия на ESC
-var closePhoto = function (evt) {
-  galleryOverlay.classList.add('hidden');
-  document.removeEventListener('keydown', onPhotoEscPress);
-};
-
-// Обработчик открытия фото на ENTER, когда фото в фокусе
-pictures.addEventListener('keydown', function (evt) {
+// Функция открытия фото на ENTER, когда фото в фокусе
+var onPhotoEnterPress = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPhoto();
   }
-});
+};
 
-// Обработчик закрытия фото на клик
-galleryOverlayClose.addEventListener('click', function () {
-  closePhoto();
-});
-
-// Обработчик закрытия фото на ENTER, когда "крестик" в фокусе
-galleryOverlayClose.addEventListener('keydown', function (evt) {
+// Функция закрытия фото на ENTER, когда "крестик" в фокусе
+var onCrossEnterPress = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closePhoto();
   }
-});
+};
 
-// Отменяет привычное поведение ссылок
-// Открывает увеличенное изображение при клике на уменьшенное
-// Получает данные атрибута src при клике на img
-pictures.addEventListener('click', function (evt) {
+var onPhotoClick = function (evt) {
   openPhoto();
   var target = evt.target;
   evt.preventDefault();
@@ -132,7 +125,21 @@ pictures.addEventListener('click', function (evt) {
   }
   var photoUrl = target.children[0].getAttribute('src');
   drawGalleryOverlay(getPhotoObject(photoUrl));
-});
+};
+
+// Обработчик открытия фото на ENTER, когда фото в фокусе
+pictures.addEventListener('keycode', onPhotoEnterPress);
+
+// Обработчик закрытия фото на клик по крестику
+galleryOverlayClose.addEventListener('click', closePhoto);
+
+// Обработчик закрытия фото на ENTER, когда "крестик" в фокусе
+galleryOverlayClose.addEventListener('keycode', onCrossEnterPress);
+
+// Отменяет привычное поведение ссылок
+// Открывает увеличенное изображение при клике на уменьшенное
+// Получает данные атрибута src при клике на img
+pictures.addEventListener('click', onPhotoClick);
 
 // Сравниваем полученный url со значением свойства объекта
 var getPhotoObject = function (url) {
