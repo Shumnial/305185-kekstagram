@@ -149,3 +149,44 @@ var getPhotoObject = function (url) {
   }
   return photoElements[i];
 };
+
+var uploadForm = document.querySelector('#upload-select-image');
+var uploadFile = uploadForm.querySelector('#upload-file');
+var uploadOverlay = uploadForm.querySelector('.upload-overlay');
+var uploadImage = uploadForm.querySelector('.upload-image');
+var uploadFormClose = uploadForm.querySelector('.upload-form-cancel');
+
+// Открывает форму кадрирования
+var openUploadForm = function () {
+  uploadOverlay.classList.remove('hidden');
+  uploadImage.classList.add('hidden');
+  document.addEventListener('keydown', onUploadFormEscPress);
+};
+
+// Закрывает формы кадрирования
+var closeUploadForm = function () {
+  uploadOverlay.classList.add('hidden');
+  uploadImage.classList.remove('hidden');
+  document.removeEventListener('keydown', onUploadFormEscPress);
+};
+
+// Закрывает форму кадрирования на ESC
+var onUploadFormEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeUploadForm();
+  }
+};
+
+// Закрывает форму кадрирования на Enter, когда крестик в фокусе
+var onUploadFormCloseEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closeUploadForm();
+  }
+};
+
+// Открывает форму кадрирования после загрузки фото
+uploadFile.addEventListener('change', openUploadForm);
+// Закрывает форму кадрировании при клике по крестику
+uploadFormClose.addEventListener('click', closeUploadForm);
+// Закрывает форму кадрирования на Enter, когда крестик в фокусе
+uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
