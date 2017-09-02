@@ -11,6 +11,9 @@ var COMMENTS = [
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 var OBJECTS_AMOUNT = 24;
+var MIN_RESIZE_VALUE = 25;
+var MAX_RESIZE_VALUE = 100;
+var RESIZE_VALUE_STEP = 25;
 
 // Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
@@ -190,3 +193,25 @@ uploadFile.addEventListener('change', openUploadForm);
 uploadFormClose.addEventListener('click', closeUploadForm);
 // Закрывает форму кадрирования на Enter, когда крестик в фокусе
 uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
+
+var resizeControlsValue = uploadOverlay.querySelector('.upload-resize-controls-value');
+var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
+var uploadImageScale = uploadOverlay.querySelector('.effect-image-preview');
+
+var getResizeValue = function (valueDirection) {
+  var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
+  var newResizeValue = defaultResizeValue + (RESIZE_VALUE_STEP * valueDirection);
+  if (newResizeValue >= MIN_RESIZE_VALUE && newResizeValue <= MAX_RESIZE_VALUE) {
+    resizeControlsValue.setAttribute('value', newResizeValue + '%');
+    uploadImageScale.style.transform = 'scale(' + newResizeValue / 100 + ')';
+  }
+};
+
+resizeControlInc.addEventListener('click', function () {
+  getResizeValue(1);
+});
+
+resizeControlDec.addEventListener('click', function () {
+  getResizeValue(-1);
+});
