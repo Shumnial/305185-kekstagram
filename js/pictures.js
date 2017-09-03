@@ -14,6 +14,8 @@ var OBJECTS_AMOUNT = 24;
 var MIN_RESIZE_VALUE = 25;
 var MAX_RESIZE_VALUE = 100;
 var RESIZE_VALUE_STEP = 25;
+var MIN_DESCR_LENGTH = 30;
+var MAX_DESCR_LENGTH = 100;
 
 // Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
@@ -197,14 +199,17 @@ uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
 var resizeControlsValue = uploadOverlay.querySelector('.upload-resize-controls-value');
 var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
 var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
-var uploadImageScale = uploadOverlay.querySelector('.effect-image-preview');
+var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
+var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
+var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
+var uploadFormSubmit = uploadOverlay.querySelector('.upload-form-submit');
 
 var getResizeValue = function (valueDirection) {
   var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
   var newResizeValue = defaultResizeValue + (RESIZE_VALUE_STEP * valueDirection);
   if (newResizeValue >= MIN_RESIZE_VALUE && newResizeValue <= MAX_RESIZE_VALUE) {
     resizeControlsValue.setAttribute('value', newResizeValue + '%');
-    uploadImageScale.style.transform = 'scale(' + newResizeValue / 100 + ')';
+    uploadImageEffects.style.transform = 'scale(' + newResizeValue / 100 + ')';
   }
 };
 
@@ -214,4 +219,42 @@ resizeControlInc.addEventListener('click', function () {
 
 resizeControlDec.addEventListener('click', function () {
   getResizeValue(-1);
+});
+
+// Минимальная и максимальная длина поля описания фотографии
+var onImageDescrInput = function (evt) {
+  if (imageDescrField.value.length < MIN_DESCR_LENGTH) {
+    imageDescrField.setCustomValidity('Комментарий должен содержать не менее 30 символов. Текущее количество : ' + imageDescrField.value.length);
+  } else if (imageDescrField.value.length > MAX_DESCR_LENGTH) {
+    imageDescrField.setCustomValidity('Комментарий должен содержать не более 100 символов. Текущее количество : ' + imageDescrField.value.length);
+  } else {
+    imageDescrField.setCustomValidity('');
+  }
+};
+
+// Проверка правильности заполнения поля хэш-тегов
+var onImageHashtagsInput = function () {
+  var hashtagsValue = imageHashtagsField.value;
+  var hashtagsList = hashtagsValue.split([' ']);
+  for (var i = 0; i < hashtagsValue.length; i++) {
+    if (hashtagsList.length > 5) {
+      imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
+    } else if (hashtagsList[i].charAt(0) !== '#') {
+      imageHashtagsField.setCustomValidity('Хэш-теги должны начинаться со знака решетки (#)');
+    } else if (hashtagsList[i].length > 20) {
+      imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
+    } else if (hashtagsList[i].indexOf('#', 2) > 0) {
+      imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
+    } else {
+      imageHashtagsField.setCustomValidity('');
+    }
+  }
+};
+
+imageDescrField.addEventListener('input', function (evt) {
+  onImageDescrInput();
+});
+
+uploadFormSubmit.addEventListener('click', function () {
+  onImageHashtagsInput();
 });
