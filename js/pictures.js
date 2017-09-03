@@ -235,18 +235,17 @@ var onImageDescrInput = function (evt) {
 // Проверка правильности заполнения поля хэш-тегов
 var onImageHashtagsInput = function () {
   var hashtagsValue = imageHashtagsField.value;
-  var hashtagsList = hashtagsValue.split([' ']);
+  var hashtagsList = hashtagsValue.split(' ');
+  imageHashtagsField.setCustomValidity('');
   for (var i = 0; i < hashtagsValue.length; i++) {
     if (hashtagsList.length > 5) {
       imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
     } else if (hashtagsList[i].charAt(0) !== '#') {
       imageHashtagsField.setCustomValidity('Хэш-теги должны начинаться со знака решетки (#)');
-    } else if (hashtagsList[i].length > 20) {
-      imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
     } else if (hashtagsList[i].indexOf('#', 2) > 0) {
       imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
-    } else {
-      imageHashtagsField.setCustomValidity('');
+    } else if (hashtagsList[i].length > 20) {
+      imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
     }
   }
 };
