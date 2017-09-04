@@ -259,7 +259,8 @@ var onImageHashtagsInput = function () {
 };
 
 var currentEffect = null;
-var onEffectPreviewClick = function (target) {
+var onEffectPreviewClick = function (evt) {
+  var target = evt.target;
   if (target.tagName === 'INPUT') {
     var effectName = target.value;
     uploadImageEffects.classList.remove(currentEffect);
