@@ -256,13 +256,16 @@ var onImageHashtagsInput = function () {
     }
   }
 };
+
+var currentEffect = null;
 var onEffectPreviewClick = function (evt) {
   var target = evt.target;
-  while (!target.tagName.contains('upload-effect-controls')) {
-    target = target.previousSibling;
+  if (target.tagName === 'INPUT') {
+    var effectName = target.value;
+    uploadImageEffects.classList.remove(currentEffect);
+    currentEffect = 'effect-' + effectName;
+    uploadImageEffects.classList.add(currentEffect);
   }
-  var currentEffect = target.previousSibling.getAttribute('value');
-  uploadImageEffects.classList.add(currentEffect);
 };
 
 imageDescrField.addEventListener('input', function (evt) {
@@ -273,6 +276,4 @@ imageHashtagsField.addEventListener('input', function () {
   onImageHashtagsInput();
 });
 
-uploadEffectsControls.addEventListener('click', function (evt) {
-  onEffectPreviewClick();
-});
+uploadEffectsControls.addEventListener('click', onEffectPreviewClick);
