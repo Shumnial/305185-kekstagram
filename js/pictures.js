@@ -132,6 +132,15 @@ var onPhotoClick = function (evt) {
   drawGalleryOverlay(getPhotoObject(photoUrl));
 };
 
+// Сравниваем полученный url со значением свойства объекта
+var getPhotoObject = function (url) {
+  var i = 0;
+  while (url !== photoElements[i].url) {
+    i++;
+  }
+  return photoElements[i];
+};
+
 // Обработчик открытия фото на ENTER, когда фото в фокусе
 pictures.addEventListener('keydown', onPhotoEnterPress);
 
@@ -145,15 +154,6 @@ galleryOverlayClose.addEventListener('keydown', onCrossEnterPress);
 // Открывает увеличенное изображение при клике на уменьшенное
 // Получает данные атрибута src при клике на img
 pictures.addEventListener('click', onPhotoClick);
-
-// Сравниваем полученный url со значением свойства объекта
-var getPhotoObject = function (url) {
-  var i = 0;
-  while (url !== photoElements[i].url) {
-    i++;
-  }
-  return photoElements[i];
-};
 
 var uploadForm = document.querySelector('#upload-select-image');
 var uploadFile = uploadForm.querySelector('#upload-file');
@@ -202,7 +202,6 @@ var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-butt
 var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
 var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
 var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
-var uploadFormSubmit = uploadOverlay.querySelector('.upload-form-submit');
 
 var getResizeValue = function (valueDirection) {
   var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
@@ -237,7 +236,21 @@ var onImageHashtagsInput = function () {
   var hashtagsValue = imageHashtagsField.value;
   var hashtagsList = hashtagsValue.split(' ');
   imageHashtagsField.setCustomValidity('');
-  for (var i = 0; i < hashtagsValue.length; i++) {
+  if (hashtagsList.length > 5) {
+    imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
+  } else {
+    for (var i = 0; i < hashtagsList.length; i++) {
+      if (hashtagsList[i].charAt(0) !== '#') {
+        imageHashtagsField.setCustomValidity('Хэш-теги должны начинаться со знака решетки (#)');
+      } else if (hashtagsList[i].indexOf('#', 2) > 0) {
+        imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
+      } else if (hashtagsList[i].length > 20) {
+        imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
+      }
+    }
+  }
+};
+/*  for (var i = 0; i < hashtagsList.length; i++) {
     if (hashtagsList.length > 5) {
       imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
     } else if (hashtagsList[i].charAt(0) !== '#') {
@@ -247,13 +260,12 @@ var onImageHashtagsInput = function () {
     } else if (hashtagsList[i].length > 20) {
       imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
     }
-  }
-};
+  } */
 
 imageDescrField.addEventListener('input', function (evt) {
   onImageDescrInput();
 });
 
-uploadFormSubmit.addEventListener('click', function () {
+imageHashtagsField.addEventListener('input', function () {
   onImageHashtagsInput();
 });
