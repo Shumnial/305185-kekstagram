@@ -202,6 +202,7 @@ var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-butt
 var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
 var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
 var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
+var uploadEffectsControls = uploadOverlay.querySelector('.upload-effect-controls');
 
 var getResizeValue = function (valueDirection) {
   var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
@@ -233,7 +234,7 @@ var onImageDescrInput = function (evt) {
 
 // Проверка правильности заполнения поля хэш-тегов
 var onImageHashtagsInput = function () {
-  var hashtagsValue = imageHashtagsField.value;
+  var hashtagsValue = imageHashtagsField.value.trim();
   var hashtagsList = hashtagsValue.split(' ');
   imageHashtagsField.setCustomValidity('');
   if (hashtagsList.length > 5) {
@@ -247,23 +248,22 @@ var onImageHashtagsInput = function () {
         imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
       } else if (hashtagsList[i].length > 20) {
         imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
-      } else if (hashtagsList[i] === hashtagsList[i + 1]) {
-        imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
+      } else if (hashtagsList.length > 1) {
+        if (hashtagsList[i] === hashtagsList[i + 1]) {
+          imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
+        }
       }
     }
   }
 };
-/*  for (var i = 0; i < hashtagsList.length; i++) {
-    if (hashtagsList.length > 5) {
-      imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
-    } else if (hashtagsList[i].charAt(0) !== '#') {
-      imageHashtagsField.setCustomValidity('Хэш-теги должны начинаться со знака решетки (#)');
-    } else if (hashtagsList[i].indexOf('#', 2) > 0) {
-      imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
-    } else if (hashtagsList[i].length > 20) {
-      imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
-    }
-  } */
+var onEffectPreviewClick = function (evt) {
+  var target = evt.target;
+  while (!target.tagName.contains('upload-effect-controls')) {
+    target = target.previousSibling;
+  }
+  var currentEffect = target.previousSibling.getAttribute('value');
+  uploadImageEffects.classList.add(currentEffect);
+};
 
 imageDescrField.addEventListener('input', function (evt) {
   onImageDescrInput();
@@ -271,4 +271,8 @@ imageDescrField.addEventListener('input', function (evt) {
 
 imageHashtagsField.addEventListener('input', function () {
   onImageHashtagsInput();
+});
+
+uploadEffectsControls.addEventListener('click', function (evt) {
+  onEffectPreviewClick();
 });
