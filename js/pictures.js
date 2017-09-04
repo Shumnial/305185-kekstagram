@@ -236,10 +236,10 @@ var onImageHashtagsInput = function () {
   var hashtagsValue = imageHashtagsField.value;
   var hashtagsList = hashtagsValue.split(' ');
   imageHashtagsField.setCustomValidity('');
-  hashtagsList.sort();
   if (hashtagsList.length > 5) {
     imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
   } else {
+    hashtagsList.sort();
     for (var i = 0; i < hashtagsList.length; i++) {
       if (hashtagsList[i].charAt(0) !== '#') {
         imageHashtagsField.setCustomValidity('Хэш-теги должны начинаться со знака решетки (#)');
@@ -247,7 +247,7 @@ var onImageHashtagsInput = function () {
         imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
       } else if (hashtagsList[i].length > 20) {
         imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
-      } else if (hashtagsList[i] === hashtagsList[++i]) {
+      } else if (hashtagsList[i] === hashtagsList[i + 1]) {
         imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
       }
     }
