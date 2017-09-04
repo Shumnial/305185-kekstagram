@@ -203,6 +203,7 @@ var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
 var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
 var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
 var uploadEffectsControls = uploadOverlay.querySelector('.upload-effect-controls');
+var uploadSubmitForm = uploadOverlay.querySelector('.upload-form-submit');
 
 var getResizeValue = function (valueDirection) {
   var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
@@ -258,13 +259,20 @@ var onImageHashtagsInput = function () {
 };
 
 var currentEffect = null;
-var onEffectPreviewClick = function (evt) {
-  var target = evt.target;
+var onEffectPreviewClick = function (target) {
   if (target.tagName === 'INPUT') {
     var effectName = target.value;
     uploadImageEffects.classList.remove(currentEffect);
     currentEffect = 'effect-' + effectName;
     uploadImageEffects.classList.add(currentEffect);
+  }
+};
+
+var onSubmitFormClick = function (fieldName) {
+  if (!fieldName.validity.valid) {
+    fieldName.style.border = '2px solid red';
+  } else {
+    fieldName.style.border = 'none';
   }
 };
 
@@ -276,4 +284,11 @@ imageHashtagsField.addEventListener('input', function () {
   onImageHashtagsInput();
 });
 
-uploadEffectsControls.addEventListener('click', onEffectPreviewClick);
+uploadEffectsControls.addEventListener('click', function (evt) {
+  onEffectPreviewClick(evt);
+});
+
+uploadSubmitForm.addEventListener('click', function () {
+  onSubmitFormClick(imageHashtagsField);
+  onSubmitFormClick(imageDescrField);
+});
