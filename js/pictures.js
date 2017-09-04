@@ -236,6 +236,7 @@ var onImageHashtagsInput = function () {
   var hashtagsValue = imageHashtagsField.value;
   var hashtagsList = hashtagsValue.split(' ');
   imageHashtagsField.setCustomValidity('');
+  hashtagsList.sort();
   if (hashtagsList.length > 5) {
     imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
   } else {
@@ -246,6 +247,8 @@ var onImageHashtagsInput = function () {
         imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
       } else if (hashtagsList[i].length > 20) {
         imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
+      } else if (hashtagsList[i] === hashtagsList[++i]) {
+        imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
       }
     }
   }
