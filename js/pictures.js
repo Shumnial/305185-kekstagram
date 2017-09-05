@@ -16,6 +16,7 @@ var MAX_RESIZE_VALUE = 100;
 var RESIZE_VALUE_STEP = 25;
 var MIN_DESCR_LENGTH = 30;
 var MAX_DESCR_LENGTH = 100;
+var MAX_HASHTAGS_AMOUNT = 5;
 
 // Получает случайное число от min до max
 var getRandomInteger = function (min, max) {
@@ -238,7 +239,7 @@ var onImageHashtagsInput = function () {
   var hashtagsValue = imageHashtagsField.value.trim();
   var hashtagsList = hashtagsValue.split(' ');
   imageHashtagsField.setCustomValidity('');
-  if (hashtagsList.length > 5) {
+  if (hashtagsList.length > MAX_HASHTAGS_AMOUNT) {
     imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
   } else {
     hashtagsList.sort();
@@ -250,7 +251,7 @@ var onImageHashtagsInput = function () {
       } else if (hashtagsList[i].length > 20) {
         imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
       } else if (hashtagsList.length > 1) {
-        if (hashtagsList[i] === hashtagsList[i + 1]) {
+        if (hashtagsList[i + 1] && hashtagsList[i] === hashtagsList[i + 1]) {
           imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
         }
       }
