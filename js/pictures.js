@@ -250,10 +250,8 @@ var onImageHashtagsInput = function () {
         imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
       } else if (hashtagsList[i].length > 20) {
         imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
-      } else if (hashtagsList.length > 1) {
-        if (hashtagsList[i + 1] && hashtagsList[i] === hashtagsList[i + 1]) {
-          imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
-        }
+      } else if (hashtagsList[i + 1] && hashtagsList[i] === hashtagsList[i + 1]) {
+        imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
       }
     }
   }
