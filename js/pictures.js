@@ -76,7 +76,7 @@ var galleryLikesCount = document.querySelector('.likes-count');
 var galleryCommentsCount = document.querySelector('.comments-count');
 
 // Функция отрисовывает изображение и информацию о нем при увеличении фото
-var drawGalleryOverlay = function (photoObjects) {
+var showGalleryOverlay = function (photoObjects) {
   galleryOverlayImage.setAttribute('src', photoObjects.url);
   galleryLikesCount.textContent = photoObjects.likes;
   galleryCommentsCount.textContent = photoObjects.comments.length;
@@ -90,7 +90,7 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
 // Функция открытия фото. Убирает класс hidden карточке с фотографией и добавляет обработчик закрытия на ESC
-var openPhoto = function () {
+var openPhoto = function (evt) {
   galleryOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onPhotoEscPress);
 };
@@ -130,7 +130,7 @@ var onPhotoClick = function (evt) {
     target = target.parentNode;
   }
   var photoUrl = target.children[0].getAttribute('src');
-  drawGalleryOverlay(getPhotoObject(photoUrl));
+  showGalleryOverlay(getPhotoObject(photoUrl));
 };
 
 // Сравниваем полученный url со значением свойства объекта
