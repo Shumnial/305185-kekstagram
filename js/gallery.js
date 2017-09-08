@@ -1,13 +1,14 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
   var pictures = document.querySelector('.pictures');
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
-  window.picture.drawPictures();
+  var drawPictures = function () {
+    pictures.appendChild(window.picture.getFragments());
+  };
+  drawPictures();
 
   // Функция открытия фото. Убирает класс hidden карточке с фотографией и добавляет обработчик закрытия на ESC
   var openPhoto = function (evt) {
@@ -23,23 +24,17 @@
 
   // Скрывает увеличенное изображение при нажатии ESC
   var onPhotoEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      closePhoto();
-    }
+    window.utils.isEscEvent(evt, closePhoto);
   };
 
   // Функция открытия фото на ENTER, когда фото в фокусе
   var onPhotoEnterPress = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      openPhoto();
-    }
+    window.utils.isEnterEvent(evt, openPhoto);
   };
 
   // Функция закрытия фото на ENTER, когда "крестик" в фокусе
   var onCrossEnterPress = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      closePhoto();
-    }
+    window.utils.isEnterEvent(evt, closePhoto);
   };
 
   var onPhotoClick = function (evt) {

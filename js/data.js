@@ -10,28 +10,18 @@
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
 
-  var OBJECTS_AMOUNT = 24;
-
-// Получает случайное число от min до max
-  var getRandomInteger = function (min, max) {
-    return Math.floor(Math.random() * (max + 1 - min) + min);
-  };
-
-// Получает случайный элемент массива
-  var getRandomArrayElement = function (array) {
-    return array[getRandomInteger(0, array.length - 1)];
-  };
+  var OBJECTS_AMOUNT = 25;
 
 // Генерирует случайные комментарии в количестве от 1 до 2
   var getRandomComments = function () {
     var commentCounts = [];
-    var firstComment = getRandomArrayElement(COMMENTS);
+    var firstComment = window.utils.getRandomArrayElement(COMMENTS);
     commentCounts[0] = firstComment;
-    var oneOrTwo = getRandomInteger(1, 2);
+    var oneOrTwo = window.utils.getRandomInteger(1, 2);
     if (oneOrTwo === 2) {
-      var secondComment = getRandomArrayElement(COMMENTS);
+      var secondComment = window.utils.getRandomArrayElement(COMMENTS);
       while (secondComment === firstComment) {
-        secondComment = getRandomArrayElement(COMMENTS);
+        secondComment = window.utils.getRandomArrayElement(COMMENTS);
       }
       commentCounts[1] = secondComment;
     }
@@ -44,27 +34,13 @@
     for (var i = 0; i <= OBJECTS_AMOUNT; i++) {
       photoObjects[i] = {
         url: 'photos/' + (i + 1) + '.jpg',
-        likes: getRandomInteger(15, 200),
+        likes: window.utils.getRandomInteger(15, 200),
         comments: getRandomComments()
       };
     }
     return photoObjects;
   };
   window.data = {
-    photoElements: getPhotoDetails(),
-
-// Добавляет изображения галереи, информацию о лайках и комментариев из шаблона в HTML-разметку
-    getFragments: function () {
-      var fragment = document.createDocumentFragment();
-      var template = document.querySelector('#picture-template').content;
-      for (var i = 0; i < window.data.photoElements.length; i++) {
-        var element = template.cloneNode(true);
-        element.querySelector('img').setAttribute('src', window.data.photoElements[i].url);
-        element.querySelector('.picture-comments').textContent = window.data.photoElements[i].comments.length;
-        element.querySelector('.picture-likes').textContent = window.data.photoElements[i].likes;
-        fragment.appendChild(element);
-      }
-      return fragment;
-    }
+    photoElements: getPhotoDetails()
   };
 })();

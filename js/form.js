@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
   var MIN_RESIZE_VALUE = 25;
   var MAX_RESIZE_VALUE = 100;
   var RESIZE_VALUE_STEP = 25;
@@ -15,6 +13,14 @@
   var uploadOverlay = uploadForm.querySelector('.upload-overlay');
   var uploadImage = uploadForm.querySelector('.upload-image');
   var uploadFormClose = uploadForm.querySelector('.upload-form-cancel');
+  var resizeControlsValue = uploadOverlay.querySelector('.upload-resize-controls-value');
+  var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+  var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
+  var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
+  var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
+  var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
+  var uploadEffectsControls = uploadOverlay.querySelector('.upload-effect-controls');
+  var uploadSubmitForm = uploadOverlay.querySelector('.upload-form-submit');
 
   // Открывает форму кадрирования
   var openUploadForm = function () {
@@ -32,34 +38,15 @@
 
   // Закрывает форму кадрирования на ESC
   var onUploadFormEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      closeUploadForm();
-    }
+    window.utils.isEscEvent(evt, closeUploadForm);
   };
 
   // Закрывает форму кадрирования на Enter, когда крестик в фокусе
   var onUploadFormCloseEnterPress = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      closeUploadForm();
-    }
+    window.utils.isEnterEvent(evt, closeUploadForm);
   };
 
-  // Открывает форму кадрирования после загрузки фото
-  uploadFile.addEventListener('change', openUploadForm);
-  // Закрывает форму кадрировании при клике по крестику
-  uploadFormClose.addEventListener('click', closeUploadForm);
-  // Закрывает форму кадрирования на Enter, когда крестик в фокусе
-  uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
-
-  var resizeControlsValue = uploadOverlay.querySelector('.upload-resize-controls-value');
-  var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
-  var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
-  var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
-  var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
-  var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
-  var uploadEffectsControls = uploadOverlay.querySelector('.upload-effect-controls');
-  var uploadSubmitForm = uploadOverlay.querySelector('.upload-form-submit');
-
+  // Увеличение-уменьшение масштаба фото (scale)
   var getResizeValue = function (valueDirection) {
     var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
     var newResizeValue = defaultResizeValue + (RESIZE_VALUE_STEP * valueDirection);
@@ -68,14 +55,6 @@
       uploadImageEffects.style.transform = 'scale(' + newResizeValue / 100 + ')';
     }
   };
-
-  resizeControlInc.addEventListener('click', function () {
-    getResizeValue(1);
-  });
-
-  resizeControlDec.addEventListener('click', function () {
-    getResizeValue(-1);
-  });
 
   // Минимальная и максимальная длина поля описания фотографии
   var onImageDescrInput = function (evt) {
@@ -111,11 +90,12 @@
     }
   };
 
+// Выбор фильтра
   var currentEffect = null;
   var onEffectPreviewClick = function (evt) {
-    var target = evt.target;
-    if (target.tagName === 'INPUT') {
-      var effectName = target.value;
+
+    if (evt.target.tagName === 'INPUT') {
+      var effectName = evt.target.value;
       uploadImageEffects.classList.remove(currentEffect);
       currentEffect = 'effect-' + effectName;
       uploadImageEffects.classList.add(currentEffect);
@@ -123,28 +103,35 @@
   };
 
   var onSubmitFormClick = function (fieldName) {
-    if (!fieldName.validity.valid) {
-      fieldName.style.border = '2px solid red';
-    } else {
-      fieldName.style.border = 'none';
-    }
+    var fieldValidity = !fieldName.validity.valid
+    ? fieldName.style.border = '2px solid red'
+    : fieldName.style.border = 'none';
+    return fieldValidity;
   };
 
-  imageDescrField.addEventListener('input', function (evt) {
-    onImageDescrInput();
+  // Открывает форму кадрирования после загрузки фото
+  uploadFile.addEventListener('change', openUploadForm);
+  // Закрывает форму кадрировании при клике по крестику
+  uploadFormClose.addEventListener('click', closeUploadForm);
+  // Закрывает форму кадрирования на Enter, когда крестик в фокусе
+  uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
+  // Увеличивает изображение на 25%
+  resizeControlInc.addEventListener('click', function () {
+    getResizeValue(1);
   });
-
-  imageHashtagsField.addEventListener('input', function () {
-    onImageHashtagsInput();
+// Уменьшает изображение на 25%
+  resizeControlDec.addEventListener('click', function () {
+    getResizeValue(-1);
   });
-
-  uploadEffectsControls.addEventListener('click', function (evt) {
-    onEffectPreviewClick(evt);
-  });
-
+// Минимальное и максимальное значение символов в поле описания фотографии
+  imageDescrField.addEventListener('input', onImageDescrInput);
+// Проверка валидности поля хэш-тегов
+  imageHashtagsField.addEventListener('input', onImageHashtagsInput);
+// Выбор фильтра при клике
+  uploadEffectsControls.addEventListener('click', onEffectPreviewClick);
+// Подсвечивание невалидных полей красной рамкой
   uploadSubmitForm.addEventListener('click', function () {
     onSubmitFormClick(imageHashtagsField);
     onSubmitFormClick(imageDescrField);
   });
-
 })();
