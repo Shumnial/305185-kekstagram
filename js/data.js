@@ -31,7 +31,7 @@
 // Создает массив из 25 объектов, присваивает свойствам объектов случайное значение лайков и комментариев
   var getPhotoDetails = function () {
     var photoObjects = [];
-    for (var i = 0; i <= OBJECTS_AMOUNT; i++) {
+    for (var i = 0; i < OBJECTS_AMOUNT; i++) {
       photoObjects[i] = {
         url: 'photos/' + (i + 1) + '.jpg',
         likes: window.utils.getRandomInteger(15, 200),
@@ -40,7 +40,6 @@
     }
     return photoObjects;
   };
-  window.data = {
-    photoElements: getPhotoDetails()
-  };
+
+  window.data = getPhotoDetails();
 })();

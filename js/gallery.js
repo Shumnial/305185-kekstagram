@@ -24,17 +24,23 @@
 
   // Скрывает увеличенное изображение при нажатии ESC
   var onPhotoEscPress = function (evt) {
-    window.utils.isEscEvent(evt, closePhoto);
+    if (window.utils.isEscEvent(evt.keyCode)) {
+      closePhoto();
+    }
   };
 
   // Функция открытия фото на ENTER, когда фото в фокусе
   var onPhotoEnterPress = function (evt) {
-    window.utils.isEnterEvent(evt, openPhoto);
+    if (window.utils.isEnterEvent(evt.keyCode)) {
+      openPhoto();
+    }
   };
 
   // Функция закрытия фото на ENTER, когда "крестик" в фокусе
   var onCrossEnterPress = function (evt) {
-    window.utils.isEnterEvent(evt, closePhoto);
+    if (window.utils.isEnterEvent(evt.keyCode)) {
+      closePhoto();
+    }
   };
 
   var onPhotoClick = function (evt) {

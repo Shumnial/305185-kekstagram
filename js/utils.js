@@ -2,8 +2,10 @@
 
 (function () {
 
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
+  var keyCodes = {
+    ESC: 27,
+    ENTER: 13
+  };
 
   window.utils = {
     // Получает случайное число от min до max
@@ -16,17 +18,13 @@
     },
 
     // Закрывает форму кадрирования на ESC
-    isEscEvent: function (evt, action) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        action();
-      }
+    isEscEvent: function (code) {
+      return code === keyCodes.ESC;
     },
 
     // Закрывает форму кадрирования на Enter, когда крестик в фокусе
-    isEnterEvent: function (evt, action) {
-      if (evt.keyCode === ENTER_KEYCODE) {
-        action();
-      }
+    isEnterEvent: function (code) {
+      return code === keyCodes.ENTER;
     }
   };
 })();

@@ -1,12 +1,14 @@
 'use strict';
 
 (function () {
-  var MIN_RESIZE_VALUE = 25;
-  var MAX_RESIZE_VALUE = 100;
-  var RESIZE_VALUE_STEP = 25;
-  var MIN_DESCR_LENGTH = 30;
-  var MAX_DESCR_LENGTH = 100;
-  var MAX_HASHTAGS_AMOUNT = 5;
+  var formConstants = {
+    MIN_RESIZE_VALUE: 25,
+    MAX_RESIZE_VALUE: 100,
+    RESIZE_VALUE_STEP: 25,
+    MIN_DESCR_LENGTH: 30,
+    MAX_DESCR_LENGTH: 100,
+    MAX_HASHTAGS_AMOUNT: 5
+  };
 
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFile = uploadForm.querySelector('#upload-file');
@@ -38,19 +40,23 @@
 
   // Закрывает форму кадрирования на ESC
   var onUploadFormEscPress = function (evt) {
-    window.utils.isEscEvent(evt, closeUploadForm);
+    if (window.utils.isEscEvent(evt.keyCode)) {
+      closeUploadForm();
+    }
   };
 
   // Закрывает форму кадрирования на Enter, когда крестик в фокусе
   var onUploadFormCloseEnterPress = function (evt) {
-    window.utils.isEnterEvent(evt, closeUploadForm);
+    if (window.utils.isEnterEvent(evt.keyCode)) {
+      closeUploadForm();
+    }
   };
 
   // Увеличение-уменьшение масштаба фото (scale)
   var getResizeValue = function (valueDirection) {
     var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
-    var newResizeValue = defaultResizeValue + (RESIZE_VALUE_STEP * valueDirection);
-    if (newResizeValue >= MIN_RESIZE_VALUE && newResizeValue <= MAX_RESIZE_VALUE) {
+    var newResizeValue = defaultResizeValue + (formConstants.RESIZE_VALUE_STEP * valueDirection);
+    if (newResizeValue >= formConstants.MIN_RESIZE_VALUE && newResizeValue <= formConstants.MAX_RESIZE_VALUE) {
       resizeControlsValue.setAttribute('value', newResizeValue + '%');
       uploadImageEffects.style.transform = 'scale(' + newResizeValue / 100 + ')';
     }
@@ -58,9 +64,9 @@
 
   // Минимальная и максимальная длина поля описания фотографии
   var onImageDescrInput = function (evt) {
-    if (imageDescrField.value.length < MIN_DESCR_LENGTH) {
+    if (imageDescrField.value.length < formConstants.MIN_DESCR_LENGTH) {
       imageDescrField.setCustomValidity('Комментарий должен содержать не менее 30 символов. Текущее количество : ' + imageDescrField.value.length);
-    } else if (imageDescrField.value.length > MAX_DESCR_LENGTH) {
+    } else if (imageDescrField.value.length > formConstants.MAX_DESCR_LENGTH) {
       imageDescrField.setCustomValidity('Комментарий должен содержать не более 100 символов. Текущее количество : ' + imageDescrField.value.length);
     } else {
       imageDescrField.setCustomValidity('');
@@ -72,7 +78,7 @@
     var hashtagsValue = imageHashtagsField.value.trim();
     var hashtagsList = hashtagsValue.split(' ');
     imageHashtagsField.setCustomValidity('');
-    if (hashtagsList.length > MAX_HASHTAGS_AMOUNT) {
+    if (hashtagsList.length > formConstants.MAX_HASHTAGS_AMOUNT) {
       imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
     } else {
       hashtagsList.sort();
@@ -103,10 +109,7 @@
   };
 
   var onSubmitFormClick = function (fieldName) {
-    var fieldValidity = !fieldName.validity.valid
-    ? fieldName.style.border = '2px solid red'
-    : fieldName.style.border = 'none';
-    return fieldValidity;
+    fieldName.style.border = !fieldName.validity.valid ? '2px solid red' : 'none';
   };
 
   // Открывает форму кадрирования после загрузки фото
@@ -135,3 +138,42 @@
     onSubmitFormClick(imageDescrField);
   });
 })();
+
+// КОД РАБОТЫ С ПОЛЗУНКОМ
+var pinHandle = document.querySelector('.upload-effect-level-pin');
+var pinLine = document.querySelector('.upload-effect-level-line');
+
+pinHandle.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startCoords.x - moveEvt.ClientX,
+      y: startCoords.y - moveEvt.ClientY
+    };
+
+    startCoords = {
+      x: moveEvt.ClientX,
+      y: moveEvt.ClientY
+    };
+
+    pinHandle.style.top = (pinHandle.offsetTop - shift.y) + 'px';
+    pinHandle.style.top = (pinHandle.offsetLeft - shift.x) + 'px';
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    pinLine.addEventListener('mousemove', onMouseMove);
+    pinLine.addEventListener('mouseup', onMouseUp);
+  };
+
+  pinLine.addEventListener('mousemove', onMouseMove);
+  pinLine.addEventListener('mouseup', onMouseUp);
+});

@@ -15,10 +15,10 @@
     // Сравниваем полученный url со значением свойства объекта
     getPhotoObject: function (url) {
       var i = 0;
-      while (url !== window.data.photoElements[i].url) {
+      while (url !== window.data[i].url) {
         i++;
       }
-      return window.data.photoElements[i];
+      return window.data[i];
     }
   };
 })();
