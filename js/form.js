@@ -9,6 +9,8 @@
     MAX_DESCR_LENGTH: 100,
     MAX_HASHTAGS_AMOUNT: 5
   };
+  var MIN_PIN_POSITION = 0;
+  var MAX_PIN_POSITION = 455;
 
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFile = uploadForm.querySelector('#upload-file');
@@ -99,12 +101,28 @@
 // Выбор фильтра
   var currentEffect = null;
   var onEffectPreviewClick = function (evt) {
-
     if (evt.target.tagName === 'INPUT') {
       var effectName = evt.target.value;
       uploadImageEffects.classList.remove(currentEffect);
       currentEffect = 'effect-' + effectName;
       uploadImageEffects.classList.add(currentEffect);
+
+      // Значения фильтра и ползунка по умолчанию
+      pinHandle.style.left = 20 + '%';
+      pinValue.style.width = 20 + '%';
+      if (uploadImageEffects.classList.contains('effect-chrome')) {
+        uploadImageEffects.style.filter = 'grayscale(0.2)';
+      } else if (uploadImageEffects.classList.contains('effect-sepia')) {
+        uploadImageEffects.style.filter = 'sepia(0.2)';
+      } else if (uploadImageEffects.classList.contains('effect-marvin')) {
+        uploadImageEffects.style.filter = 'invert(20%)';
+      } else if (uploadImageEffects.classList.contains('effect-phobos')) {
+        uploadImageEffects.style.filter = 'blur(0.6px)';
+      } else if (uploadImageEffects.classList.contains('effect-heat')) {
+        uploadImageEffects.style.filter = 'brightness(0.6)';
+      } else {
+        uploadImageEffects.style.filter = 'none';
+      }
     }
   };
 
@@ -137,43 +155,55 @@
     onSubmitFormClick(imageHashtagsField);
     onSubmitFormClick(imageDescrField);
   });
+
+  // КОД РАБОТЫ С ПОЛЗУНКОМ
+  var pinHandle = document.querySelector('.upload-effect-level-pin');
+  var pinValue = document.querySelector('.upload-effect-level-val');
+
+  pinHandle.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoord = evt.clientX;
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = startCoord - moveEvt.clientX;
+
+      startCoord = moveEvt.clientX;
+
+      if (pinHandle.offsetLeft - shift <= MIN_PIN_POSITION) {
+        pinHandle.style.left = MIN_PIN_POSITION + 'px';
+        pinValue.style.width = MIN_PIN_POSITION + 'px';
+      } else if (pinHandle.offsetLeft - shift >= MAX_PIN_POSITION) {
+        pinHandle.style.left = MAX_PIN_POSITION + 'px';
+        pinValue.style.width = MAX_PIN_POSITION + 'px';
+      } else {
+        pinHandle.style.left = (pinHandle.offsetLeft - shift) + 'px';
+        pinValue.style.width = (pinHandle.offsetLeft - shift) + 'px';
+      }
+
+      if (uploadImageEffects.classList.contains('effect-chrome')) {
+        uploadImageEffects.style.filter = 'grayscale(' + (pinHandle.offsetLeft - shift) / MAX_PIN_POSITION + ')';
+      } else if (uploadImageEffects.classList.contains('effect-sepia')) {
+        uploadImageEffects.style.filter = 'sepia(' + (pinHandle.offsetLeft - shift) / MAX_PIN_POSITION + ')';
+      } else if (uploadImageEffects.classList.contains('effect-marvin')) {
+        uploadImageEffects.style.filter = 'invert(' + Math.floor((pinHandle.offsetLeft - shift) * 100 / MAX_PIN_POSITION) + '%)';
+      } else if (uploadImageEffects.classList.contains('effect-phobos')) {
+        uploadImageEffects.style.filter = 'blur(' + (pinHandle.offsetLeft - shift) * 3 / MAX_PIN_POSITION + 'px)';
+      } else if (uploadImageEffects.classList.contains('effect-heat')) {
+        uploadImageEffects.style.filter = 'brightness(' + (pinHandle.offsetLeft - shift) * 3 / MAX_PIN_POSITION + ')';
+      }
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 })();
-
-// КОД РАБОТЫ С ПОЛЗУНКОМ
-var pinHandle = document.querySelector('.upload-effect-level-pin');
-var pinLine = document.querySelector('.upload-effect-level-line');
-
-pinHandle.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
-
-  var startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
-  };
-
-  var onMouseMove = function (moveEvt) {
-    moveEvt.preventDefault();
-    var shift = {
-      x: startCoords.x - moveEvt.ClientX,
-      y: startCoords.y - moveEvt.ClientY
-    };
-
-    startCoords = {
-      x: moveEvt.ClientX,
-      y: moveEvt.ClientY
-    };
-
-    pinHandle.style.top = (pinHandle.offsetTop - shift.y) + 'px';
-    pinHandle.style.top = (pinHandle.offsetLeft - shift.x) + 'px';
-  };
-
-  var onMouseUp = function (upEvt) {
-    upEvt.preventDefault();
-
-    pinLine.addEventListener('mousemove', onMouseMove);
-    pinLine.addEventListener('mouseup', onMouseUp);
-  };
-
-  pinLine.addEventListener('mousemove', onMouseMove);
-  pinLine.addEventListener('mouseup', onMouseUp);
-});
