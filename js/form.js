@@ -103,22 +103,22 @@
     }
   };
 
-  var getScaleValue = function () {
+  var getScaleValue = function (value) {
     switch (currentEffect) {
       case 'effect-chrome':
-        uploadImageEffects.style.filter = 'grayscale(' + (scaleValue) / pinValues.MAX_PIN_POSITION + ')';
+        uploadImageEffects.style.filter = 'grayscale(' + (value) / pinValues.MAX_PIN_POSITION + ')';
         break;
       case 'effect-sepia':
-        uploadImageEffects.style.filter = 'sepia(' + (scaleValue) / pinValues.MAX_PIN_POSITION + ')';
+        uploadImageEffects.style.filter = 'sepia(' + (value) / pinValues.MAX_PIN_POSITION + ')';
         break;
       case 'effect-marvin':
-        uploadImageEffects.style.filter = 'invert(' + Math.floor((scaleValue) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
+        uploadImageEffects.style.filter = 'invert(' + Math.floor((value) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
         break;
       case 'effect-phobos':
-        uploadImageEffects.style.filter = 'blur(' + (scaleValue) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
+        uploadImageEffects.style.filter = 'blur(' + (value) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
         break;
       case 'effect-heat':
-        uploadImageEffects.style.filter = 'brightness(' + (scaleValue) * 3 / pinValues.MAX_PIN_POSITION + ')';
+        uploadImageEffects.style.filter = 'brightness(' + (value) * 3 / pinValues.MAX_PIN_POSITION + ')';
         break;
       default:
         uploadImageEffects.style.filter = 'none';
@@ -135,8 +135,8 @@
       uploadImageEffects.classList.add(currentEffect);
       // Значения фильтра и ползунка по умолчанию
       pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
-      pinValue.style.width = pinValues.DEFAULT_PIN_POSITION;
-      getScaleValue();
+      pinValue.style.width = pinHandle.style.left;
+      getScaleValue(scaleValue);
     }
   };
 
@@ -190,13 +190,13 @@
 
       if (pinHandle.offsetLeft - shift <= pinValues.MIN_PIN_POSITION) {
         pinHandle.style.left = pinValues.MIN_PIN_POSITION + 'px';
-        pinValue.style.width = pinValues.MIN_PIN_POSITION + 'px';
+        pinValue.style.width = pinHandle.style.left;
       } else if (pinHandle.offsetLeft - shift >= pinValues.MAX_PIN_POSITION) {
         pinHandle.style.left = pinValues.MAX_PIN_POSITION + 'px';
-        pinValue.style.width = pinValues.MAX_PIN_POSITION + 'px';
+        pinValue.style.width = pinHandle.style.left;
       } else {
         pinHandle.style.left = (scaleValue) + 'px';
-        pinValue.style.width = (scaleValue) + 'px';
+        pinValue.style.width = pinHandle.style.left;
       }
         /* if (uploadImageEffects.classList.contains('effect-chrome')) {
           uploadImageEffects.style.filter = 'grayscale(' + (currentPosition) / pinValues.MAX_PIN_POSITION + ')';
@@ -209,7 +209,7 @@
         } else if (uploadImageEffects.classList.contains('effect-heat')) {
           uploadImageEffects.style.filter = 'brightness(' + (currentPosition) * 3 / pinValues.MAX_PIN_POSITION + ')';
         } */
-      getScaleValue();
+      getScaleValue(scaleValue);
     };
 
     var onMouseUp = function (upEvt) {
