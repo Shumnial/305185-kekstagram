@@ -196,17 +196,6 @@
         pinHandle.style.left = (scaleValue) + 'px';
       }
       pinValue.style.width = pinHandle.style.left;
-        /* if (uploadImageEffects.classList.contains('effect-chrome')) {
-          uploadImageEffects.style.filter = 'grayscale(' + (currentPosition) / pinValues.MAX_PIN_POSITION + ')';
-        } else if (uploadImageEffects.classList.contains('effect-sepia')) {
-          uploadImageEffects.style.filter = 'sepia(' + (currentPosition) / pinValues.MAX_PIN_POSITION + ')';
-        } else if (uploadImageEffects.classList.contains('effect-marvin')) {
-          uploadImageEffects.style.filter = 'invert(' + Math.floor((currentPosition) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
-        } else if (uploadImageEffects.classList.contains('effect-phobos')) {
-          uploadImageEffects.style.filter = 'blur(' + (currentPosition) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
-        } else if (uploadImageEffects.classList.contains('effect-heat')) {
-          uploadImageEffects.style.filter = 'brightness(' + (currentPosition) * 3 / pinValues.MAX_PIN_POSITION + ')';
-        } */
       getScaleValue(scaleValue);
     };
 
