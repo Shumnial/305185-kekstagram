@@ -9,8 +9,13 @@
     MAX_DESCR_LENGTH: 100,
     MAX_HASHTAGS_AMOUNT: 5
   };
-  var MIN_PIN_POSITION = 0;
-  var MAX_PIN_POSITION = 455;
+
+  var pinValues = {
+    MIN_PIN_POSITION: 0,
+    MAX_PIN_POSITION: 455,
+    DEFAULT_PIN_POSITION: 20 + '%'
+  };
+
 
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFile = uploadForm.querySelector('#upload-file');
@@ -106,22 +111,27 @@
       uploadImageEffects.classList.remove(currentEffect);
       currentEffect = 'effect-' + effectName;
       uploadImageEffects.classList.add(currentEffect);
-
       // Значения фильтра и ползунка по умолчанию
-      pinHandle.style.left = 20 + '%';
-      pinValue.style.width = 20 + '%';
-      if (uploadImageEffects.classList.contains('effect-chrome')) {
-        uploadImageEffects.style.filter = 'grayscale(0.2)';
-      } else if (uploadImageEffects.classList.contains('effect-sepia')) {
-        uploadImageEffects.style.filter = 'sepia(0.2)';
-      } else if (uploadImageEffects.classList.contains('effect-marvin')) {
-        uploadImageEffects.style.filter = 'invert(20%)';
-      } else if (uploadImageEffects.classList.contains('effect-phobos')) {
-        uploadImageEffects.style.filter = 'blur(0.6px)';
-      } else if (uploadImageEffects.classList.contains('effect-heat')) {
-        uploadImageEffects.style.filter = 'brightness(0.6)';
-      } else {
-        uploadImageEffects.style.filter = 'none';
+      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
+      pinValue.style.width = pinValues.DEFAULT_PIN_POSITION;
+      switch (currentEffect) {
+        case 'effect-chrome':
+          uploadImageEffects.style.filter = 'grayscale(0.2)';
+          break;
+        case 'effect-sepia':
+          uploadImageEffects.style.filter = 'sepia(0.2)';
+          break;
+        case 'effect-marvin':
+          uploadImageEffects.style.filter = 'invert(20%)';
+          break;
+        case 'effect-phobos':
+          uploadImageEffects.style.filter = 'blur(0.6px)';
+          break;
+        case 'effect-heat':
+          uploadImageEffects.style.filter = 'brightness(0.6)';
+          break;
+        default:
+          uploadImageEffects.style.filter = 'none';
       }
     }
   };
@@ -165,6 +175,8 @@
 
     var startCoord = evt.clientX;
 
+    var scaleValue = null;
+
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
@@ -172,28 +184,49 @@
 
       startCoord = moveEvt.clientX;
 
-      if (pinHandle.offsetLeft - shift <= MIN_PIN_POSITION) {
-        pinHandle.style.left = MIN_PIN_POSITION + 'px';
-        pinValue.style.width = MIN_PIN_POSITION + 'px';
-      } else if (pinHandle.offsetLeft - shift >= MAX_PIN_POSITION) {
-        pinHandle.style.left = MAX_PIN_POSITION + 'px';
-        pinValue.style.width = MAX_PIN_POSITION + 'px';
+      scaleValue = pinHandle.offsetLeft - shift;
+
+      if (pinHandle.offsetLeft - shift <= pinValues.MIN_PIN_POSITION) {
+        pinHandle.style.left = pinValues.MIN_PIN_POSITION + 'px';
+        pinValue.style.width = pinValues.MIN_PIN_POSITION + 'px';
+      } else if (pinHandle.offsetLeft - shift >= pinValues.MAX_PIN_POSITION) {
+        pinHandle.style.left = pinValues.MAX_PIN_POSITION + 'px';
+        pinValue.style.width = pinValues.MAX_PIN_POSITION + 'px';
       } else {
-        pinHandle.style.left = (pinHandle.offsetLeft - shift) + 'px';
-        pinValue.style.width = (pinHandle.offsetLeft - shift) + 'px';
+        pinHandle.style.left = (scaleValue) + 'px';
+        pinValue.style.width = (scaleValue) + 'px';
       }
 
-      if (uploadImageEffects.classList.contains('effect-chrome')) {
-        uploadImageEffects.style.filter = 'grayscale(' + (pinHandle.offsetLeft - shift) / MAX_PIN_POSITION + ')';
-      } else if (uploadImageEffects.classList.contains('effect-sepia')) {
-        uploadImageEffects.style.filter = 'sepia(' + (pinHandle.offsetLeft - shift) / MAX_PIN_POSITION + ')';
-      } else if (uploadImageEffects.classList.contains('effect-marvin')) {
-        uploadImageEffects.style.filter = 'invert(' + Math.floor((pinHandle.offsetLeft - shift) * 100 / MAX_PIN_POSITION) + '%)';
-      } else if (uploadImageEffects.classList.contains('effect-phobos')) {
-        uploadImageEffects.style.filter = 'blur(' + (pinHandle.offsetLeft - shift) * 3 / MAX_PIN_POSITION + 'px)';
-      } else if (uploadImageEffects.classList.contains('effect-heat')) {
-        uploadImageEffects.style.filter = 'brightness(' + (pinHandle.offsetLeft - shift) * 3 / MAX_PIN_POSITION + ')';
+      switch (currentEffect) {
+        case 'effect-chrome':
+          uploadImageEffects.style.filter = 'grayscale(' + (scaleValue) / pinValues.MAX_PIN_POSITION + ')';
+          break;
+        case 'effect-sepia':
+          uploadImageEffects.style.filter = 'sepia(' + (scaleValue) / pinValues.MAX_PIN_POSITION + ')';
+          break;
+        case 'effect-marvin':
+          uploadImageEffects.style.filter = 'invert(' + Math.floor((scaleValue) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
+          break;
+        case 'effect-phobos':
+          uploadImageEffects.style.filter = 'blur(' + (scaleValue) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
+          break;
+        case 'effect-heat':
+          uploadImageEffects.style.filter = 'brightness(' + (scaleValue) * 3 / pinValues.MAX_PIN_POSITION + ')';
+          break;
+        default:
+          uploadImageEffects.style.filter = 'none';
       }
+        /* if (uploadImageEffects.classList.contains('effect-chrome')) {
+          uploadImageEffects.style.filter = 'grayscale(' + (currentPosition) / pinValues.MAX_PIN_POSITION + ')';
+        } else if (uploadImageEffects.classList.contains('effect-sepia')) {
+          uploadImageEffects.style.filter = 'sepia(' + (currentPosition) / pinValues.MAX_PIN_POSITION + ')';
+        } else if (uploadImageEffects.classList.contains('effect-marvin')) {
+          uploadImageEffects.style.filter = 'invert(' + Math.floor((currentPosition) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
+        } else if (uploadImageEffects.classList.contains('effect-phobos')) {
+          uploadImageEffects.style.filter = 'blur(' + (currentPosition) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
+        } else if (uploadImageEffects.classList.contains('effect-heat')) {
+          uploadImageEffects.style.filter = 'brightness(' + (currentPosition) * 3 / pinValues.MAX_PIN_POSITION + ')';
+        } */
     };
 
     var onMouseUp = function (upEvt) {
