@@ -13,7 +13,7 @@
   var pinValues = {
     MIN_PIN_POSITION: 0,
     MAX_PIN_POSITION: 455,
-    DEFAULT_PIN_POSITION: 20
+    DEFAULT_PIN_POSITION: 455 * 0.20
   };
 
 
@@ -134,9 +134,9 @@
       currentEffect = 'effect-' + effectName;
       uploadImageEffects.classList.add(currentEffect);
       // Значения фильтра и ползунка по умолчанию
-      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + '%';
+      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
       pinValue.style.width = pinHandle.style.left;
-      getScaleValue(pinValues.DEFAULT_PIN_POSITION + '%');
+      getScaleValue(pinValues.DEFAULT_PIN_POSITION);
     }
   };
 
