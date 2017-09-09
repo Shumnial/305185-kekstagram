@@ -190,14 +190,12 @@
 
       if (pinHandle.offsetLeft - shift <= pinValues.MIN_PIN_POSITION) {
         pinHandle.style.left = pinValues.MIN_PIN_POSITION + 'px';
-        pinValue.style.width = pinHandle.style.left;
       } else if (pinHandle.offsetLeft - shift >= pinValues.MAX_PIN_POSITION) {
         pinHandle.style.left = pinValues.MAX_PIN_POSITION + 'px';
-        pinValue.style.width = pinHandle.style.left;
       } else {
         pinHandle.style.left = (scaleValue) + 'px';
-        pinValue.style.width = pinHandle.style.left;
       }
+      pinValue.style.width = pinHandle.style.left;
         /* if (uploadImageEffects.classList.contains('effect-chrome')) {
           uploadImageEffects.style.filter = 'grayscale(' + (currentPosition) / pinValues.MAX_PIN_POSITION + ')';
         } else if (uploadImageEffects.classList.contains('effect-sepia')) {
