@@ -134,7 +134,7 @@
       currentEffect = 'effect-' + effectName;
       uploadImageEffects.classList.add(currentEffect);
       // Значения фильтра и ползунка по умолчанию
-      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
+      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
       pinValue.style.width = pinHandle.style.left;
       getScaleValue(pinValues.DEFAULT_PIN_POSITION);
     }
