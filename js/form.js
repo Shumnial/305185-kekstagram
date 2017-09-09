@@ -30,6 +30,7 @@
   var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
   var uploadEffectsControls = uploadOverlay.querySelector('.upload-effect-controls');
   var uploadSubmitForm = uploadOverlay.querySelector('.upload-form-submit');
+  var uploadEffectLevel = uploadOverlay.querySelector('.upload-effect-level');
 
   // Открывает форму кадрирования
   var openUploadForm = function () {
@@ -136,6 +137,11 @@
       // Значения фильтра и ползунка по умолчанию
       pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
       pinValue.style.width = pinHandle.style.left;
+      if (currentEffect !== 'effect-none') {
+        uploadEffectLevel.classList.remove('hidden');
+      } else {
+        uploadEffectLevel.classList.add('hidden');
+      }
       getScaleValue(pinValues.DEFAULT_PIN_POSITION);
     }
   };
@@ -209,4 +215,5 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+  uploadEffectLevel.classList.add('hidden');
 })();
