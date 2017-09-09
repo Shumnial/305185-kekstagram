@@ -13,7 +13,7 @@
   var pinValues = {
     MIN_PIN_POSITION: 0,
     MAX_PIN_POSITION: 455,
-    DEFAULT_PIN_POSITION: 20 + '%'
+    DEFAULT_PIN_POSITION: 20
   };
 
 
@@ -134,9 +134,9 @@
       currentEffect = 'effect-' + effectName;
       uploadImageEffects.classList.add(currentEffect);
       // Значения фильтра и ползунка по умолчанию
-      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
+      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + '%';
       pinValue.style.width = pinHandle.style.left;
-      getScaleValue(scaleValue);
+      getScaleValue(pinValues.DEFAULT_PIN_POSITION + '%');
     }
   };
 
@@ -173,7 +173,6 @@
   // КОД РАБОТЫ С ПОЛЗУНКОМ
   var pinHandle = document.querySelector('.upload-effect-level-pin');
   var pinValue = document.querySelector('.upload-effect-level-val');
-  var scaleValue = null;
   pinHandle.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -186,7 +185,7 @@
 
       startCoord = moveEvt.clientX;
 
-      scaleValue = pinHandle.offsetLeft - shift;
+      var scaleValue = pinHandle.offsetLeft - shift;
 
       if (pinHandle.offsetLeft - shift <= pinValues.MIN_PIN_POSITION) {
         pinHandle.style.left = pinValues.MIN_PIN_POSITION + 'px';
@@ -196,6 +195,7 @@
         pinHandle.style.left = (scaleValue) + 'px';
       }
       pinValue.style.width = pinHandle.style.left;
+
       getScaleValue(scaleValue);
     };
 
