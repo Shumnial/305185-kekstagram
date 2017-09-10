@@ -60,16 +60,6 @@
     }
   };
 
-  // Увеличение-уменьшение масштаба фото (scale)
-  var getResizeValue = function (valueDirection) {
-    var defaultResizeValue = parseInt(resizeControlsValue.getAttribute('value'), 10);
-    var newResizeValue = defaultResizeValue + (formConstants.RESIZE_VALUE_STEP * valueDirection);
-    if (newResizeValue >= formConstants.MIN_RESIZE_VALUE && newResizeValue <= formConstants.MAX_RESIZE_VALUE) {
-      resizeControlsValue.setAttribute('value', newResizeValue + '%');
-      uploadImageEffects.style.transform = 'scale(' + newResizeValue / 100 + ')';
-    }
-  };
-
   // Минимальная и максимальная длина поля описания фотографии
   var onImageDescrInput = function (evt) {
     if (imageDescrField.value.length < formConstants.MIN_DESCR_LENGTH) {
@@ -158,11 +148,11 @@
   uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
   // Увеличивает изображение на 25%
   resizeControlInc.addEventListener('click', function () {
-    getResizeValue(1);
+    window.initializeScale.getResizeValue(resizeControlsValue, uploadImageEffects, 1);
   });
 // Уменьшает изображение на 25%
   resizeControlDec.addEventListener('click', function () {
-    getResizeValue(-1);
+    window.initializeScale.getResizeValue(resizeControlsValue, uploadImageEffects, -1);
   });
 // Минимальное и максимальное значение символов в поле описания фотографии
   imageDescrField.addEventListener('input', onImageDescrInput);
