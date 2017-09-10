@@ -94,47 +94,8 @@
     }
   };
 
-  var getScaleValue = function (value) {
-    switch (currentEffect) {
-      case 'effect-chrome':
-        uploadImageEffects.style.filter = 'grayscale(' + (value) / pinValues.MAX_PIN_POSITION + ')';
-        break;
-      case 'effect-sepia':
-        uploadImageEffects.style.filter = 'sepia(' + (value) / pinValues.MAX_PIN_POSITION + ')';
-        break;
-      case 'effect-marvin':
-        uploadImageEffects.style.filter = 'invert(' + Math.floor((value) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
-        break;
-      case 'effect-phobos':
-        uploadImageEffects.style.filter = 'blur(' + (value) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
-        break;
-      case 'effect-heat':
-        uploadImageEffects.style.filter = 'brightness(' + (value) * 3 / pinValues.MAX_PIN_POSITION + ')';
-        break;
-      default:
-        uploadImageEffects.style.filter = 'none';
-    }
-  };
-
 // Выбор фильтра
-  var currentEffect = null;
-  var onEffectPreviewClick = function (evt) {
-    if (evt.target.tagName === 'INPUT') {
-      var effectName = evt.target.value;
-      uploadImageEffects.classList.remove(currentEffect);
-      currentEffect = 'effect-' + effectName;
-      uploadImageEffects.classList.add(currentEffect);
-      // Значения фильтра и ползунка по умолчанию
-      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
-      pinValue.style.width = pinHandle.style.left;
-      if (currentEffect !== 'effect-none') {
-        uploadEffectLevel.classList.remove('hidden');
-      } else {
-        uploadEffectLevel.classList.add('hidden');
-      }
-      getScaleValue(pinValues.DEFAULT_PIN_POSITION);
-    }
-  };
+
 
   var onSubmitFormClick = function (fieldName) {
     fieldName.style.border = !fieldName.validity.valid ? '2px solid red' : 'none';
@@ -159,7 +120,9 @@
 // Проверка валидности поля хэш-тегов
   imageHashtagsField.addEventListener('input', onImageHashtagsInput);
 // Выбор фильтра при клике
-  uploadEffectsControls.addEventListener('click', onEffectPreviewClick);
+  uploadEffectsControls.addEventListener('click', function (evt) {
+    window.initializeFilters.onEffectPreviewClick(evt, uploadImageEffects, pinHandle, pinValue, uploadEffectLevel);
+  });
 // Подсвечивание невалидных полей красной рамкой
   uploadSubmitForm.addEventListener('click', function () {
     onSubmitFormClick(imageHashtagsField);
@@ -192,7 +155,7 @@
       }
       pinValue.style.width = pinHandle.style.left;
 
-      getScaleValue(scaleValue);
+      window.initializeFilters.getScaleValue(scaleValue, uploadImageEffects);
     };
 
     var onMouseUp = function (upEvt) {
