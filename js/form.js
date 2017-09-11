@@ -10,18 +10,17 @@
     MAX_HASHTAGS_AMOUNT: 5
   };
 
-  var pinValues = {
-    MIN_PIN_POSITION: 0,
-    MAX_PIN_POSITION: 455,
-    DEFAULT_PIN_POSITION: 455 * 0.20
-  };
-
   var scaleConstants = {
     MIN_RESIZE_VALUE: 25,
     MAX_RESIZE_VALUE: 100,
     RESIZE_VALUE_STEP: 25
   };
 
+  var pinValues = {
+    MIN_PIN_POSITION: 0,
+    MAX_PIN_POSITION: 455,
+    DEFAULT_PIN_POSITION: 455 * 0.20
+  };
 
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFile = uploadForm.querySelector('#upload-file');
@@ -31,8 +30,9 @@
   var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
   var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
   var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
-  var uploadEffectsControls = uploadOverlay.querySelector('.upload-effect-controls');
   var uploadSubmitForm = uploadOverlay.querySelector('.upload-form-submit');
+  var pinHandle = document.querySelector('.upload-effect-level-pin');
+  var pinValue = document.querySelector('.upload-effect-level-val');
   var uploadEffectLevel = uploadOverlay.querySelector('.upload-effect-level');
 
   // Открывает форму кадрирования
@@ -107,11 +107,58 @@
     }
   };
 
+// Подсвечивает невалидные поля красной рамкой
   var onSubmitFormClick = function (fieldName) {
     fieldName.style.border = !fieldName.validity.valid ? '2px solid red' : 'none';
   };
 
+// Изменяет значение текущего фильтра
+  var setFilterValue = function (value, pictureElement) {
+    switch (currentEffect) {
+      case 'effect-chrome':
+        pictureElement.style.filter = 'grayscale(' + (value) / pinValues.MAX_PIN_POSITION + ')';
+        break;
+      case 'effect-sepia':
+        pictureElement.style.filter = 'sepia(' + (value) / pinValues.MAX_PIN_POSITION + ')';
+        break;
+      case 'effect-marvin':
+        pictureElement.style.filter = 'invert(' + Math.floor((value) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
+        break;
+      case 'effect-phobos':
+        pictureElement.style.filter = 'blur(' + (value) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
+        break;
+      case 'effect-heat':
+        pictureElement.style.filter = 'brightness(' + (value) * 3 / pinValues.MAX_PIN_POSITION + ')';
+        break;
+      default:
+        pictureElement.style.filter = 'none';
+    }
+  };
+
+// Изменяет  текущий фильр
+  var currentEffect = null;
+  var onEffectPreviewClick = function (evt, pictureElement, pin, pinLevelValue, effectLevel) {
+    if (evt.target.tagName === 'INPUT') {
+      var effectName = evt.target.value;
+      uploadImageEffects.classList.remove(currentEffect);
+      currentEffect = 'effect-' + effectName;
+      pictureElement.classList.add(currentEffect);
+      // Значения фильтра и ползунка по умолчанию
+      pin.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
+      pinLevelValue.style.width = pin.style.left;
+      if (currentEffect !== 'effect-none') {
+        effectLevel.classList.remove('hidden');
+      } else {
+        effectLevel.classList.add('hidden');
+      }
+      setFilterValue(pinValues.DEFAULT_PIN_POSITION, pictureElement);
+    }
+  };
+
+  // Увеличивает-уменьшает изображение перед публикацией (scale)
   window.initializeScale(getResizeValue, 1, -1);
+  // Изменяет текущий фильтр
+  window.initializeFilters(onEffectPreviewClick);
   // Открывает форму кадрирования после загрузки фото
   uploadFile.addEventListener('change', openUploadForm);
   // Закрывает форму кадрировании при клике по крестику
@@ -122,10 +169,6 @@
   imageDescrField.addEventListener('input', onImageDescrInput);
 // Проверка валидности поля хэш-тегов
   imageHashtagsField.addEventListener('input', onImageHashtagsInput);
-// Выбор фильтра при клике
-  uploadEffectsControls.addEventListener('click', function (evt) {
-    window.initializeFilters.onEffectPreviewClick(evt, uploadImageEffects, pinHandle, pinValue, uploadEffectLevel);
-  });
 // Подсвечивание невалидных полей красной рамкой
   uploadSubmitForm.addEventListener('click', function () {
     onSubmitFormClick(imageHashtagsField);
@@ -133,8 +176,6 @@
   });
 
   // КОД РАБОТЫ С ПОЛЗУНКОМ
-  var pinHandle = document.querySelector('.upload-effect-level-pin');
-  var pinValue = document.querySelector('.upload-effect-level-val');
   pinHandle.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -158,7 +199,7 @@
       }
       pinValue.style.width = pinHandle.style.left;
 
-      window.initializeFilters.getScaleValue(scaleValue, uploadImageEffects);
+      setFilterValue(scaleValue, uploadImageEffects);
     };
 
     var onMouseUp = function (upEvt) {
