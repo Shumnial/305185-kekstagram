@@ -16,15 +16,18 @@
     DEFAULT_PIN_POSITION: 455 * 0.20
   };
 
+  var scaleConstants = {
+    MIN_RESIZE_VALUE: 25,
+    MAX_RESIZE_VALUE: 100,
+    RESIZE_VALUE_STEP: 25
+  };
+
 
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFile = uploadForm.querySelector('#upload-file');
   var uploadOverlay = uploadForm.querySelector('.upload-overlay');
   var uploadImage = uploadForm.querySelector('.upload-image');
   var uploadFormClose = uploadForm.querySelector('.upload-form-cancel');
-  var resizeControlsValue = uploadOverlay.querySelector('.upload-resize-controls-value');
-  var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
-  var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
   var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
   var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
   var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
@@ -94,9 +97,6 @@
     }
   };
 
-// Выбор фильтра
-
-
   var onSubmitFormClick = function (fieldName) {
     fieldName.style.border = !fieldName.validity.valid ? '2px solid red' : 'none';
   };
@@ -107,14 +107,6 @@
   uploadFormClose.addEventListener('click', closeUploadForm);
   // Закрывает форму кадрирования на Enter, когда крестик в фокусе
   uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
-  // Увеличивает изображение на 25%
-  resizeControlInc.addEventListener('click', function () {
-    window.initializeScale.getResizeValue(resizeControlsValue, uploadImageEffects, 1);
-  });
-// Уменьшает изображение на 25%
-  resizeControlDec.addEventListener('click', function () {
-    window.initializeScale.getResizeValue(resizeControlsValue, uploadImageEffects, -1);
-  });
 // Минимальное и максимальное значение символов в поле описания фотографии
   imageDescrField.addEventListener('input', onImageDescrInput);
 // Проверка валидности поля хэш-тегов
@@ -169,4 +161,17 @@
     document.addEventListener('mouseup', onMouseUp);
   });
   uploadEffectLevel.classList.add('hidden');
+
+// Увеличение-уменьшение элемента
+  window.form = {
+    getResizeValue: function (scaleElement, pictureElement, valueDirection) {
+      var defaultResizeValue = parseInt(scaleElement.getAttribute('value'), 10);
+      var newResizeValue = defaultResizeValue + (scaleConstants.RESIZE_VALUE_STEP * valueDirection);
+      if (newResizeValue >= scaleConstants.MIN_RESIZE_VALUE && newResizeValue <= scaleConstants.MAX_RESIZE_VALUE) {
+        scaleElement.setAttribute('value', newResizeValue + '%');
+        pictureElement.style.transform = 'scale(' + newResizeValue / 100 + ')';
+      }
+    }
+  };
+
 })();
