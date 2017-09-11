@@ -97,10 +97,21 @@
     }
   };
 
+  // Увеличение-уменьшение элемента
+  var getResizeValue = function (scaleElement, pictureElement, valueDirection) {
+    var defaultResizeValue = parseInt(scaleElement.getAttribute('value'), 10);
+    var newResizeValue = defaultResizeValue + (scaleConstants.RESIZE_VALUE_STEP * valueDirection);
+    if (newResizeValue >= scaleConstants.MIN_RESIZE_VALUE && newResizeValue <= scaleConstants.MAX_RESIZE_VALUE) {
+      scaleElement.setAttribute('value', newResizeValue + '%');
+      pictureElement.style.transform = 'scale(' + newResizeValue / 100 + ')';
+    }
+  };
+
   var onSubmitFormClick = function (fieldName) {
     fieldName.style.border = !fieldName.validity.valid ? '2px solid red' : 'none';
   };
 
+  window.initializeScale(getResizeValue, 1, -1);
   // Открывает форму кадрирования после загрузки фото
   uploadFile.addEventListener('change', openUploadForm);
   // Закрывает форму кадрировании при клике по крестику
@@ -161,17 +172,4 @@
     document.addEventListener('mouseup', onMouseUp);
   });
   uploadEffectLevel.classList.add('hidden');
-
-// Увеличение-уменьшение элемента
-  window.form = {
-    getResizeValue: function (scaleElement, pictureElement, valueDirection) {
-      var defaultResizeValue = parseInt(scaleElement.getAttribute('value'), 10);
-      var newResizeValue = defaultResizeValue + (scaleConstants.RESIZE_VALUE_STEP * valueDirection);
-      if (newResizeValue >= scaleConstants.MIN_RESIZE_VALUE && newResizeValue <= scaleConstants.MAX_RESIZE_VALUE) {
-        scaleElement.setAttribute('value', newResizeValue + '%');
-        pictureElement.style.transform = 'scale(' + newResizeValue / 100 + ')';
-      }
-    }
-  };
-
 })();
