@@ -155,6 +155,14 @@
     }
   };
 
+  uploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(uploadForm), function (response) {
+      closeUploadForm();
+    });
+  });
+
+
   // Увеличивает-уменьшает изображение перед публикацией (scale)
   window.initializeScale(getResizeValue, 1, -1);
   // Изменяет текущий фильтр
