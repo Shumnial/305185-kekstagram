@@ -5,10 +5,12 @@
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
-  var loadedData = null;
+  window.gallery = {
+    loadedData: null
+  };
   var onLoad = function (data) {
-    loadedData = data;
-    pictures.appendChild(window.picture.getFragments(loadedData));
+    window.gallery.loadedData = data;
+    pictures.appendChild(window.picture.getFragments(window.gallery.loadedData));
   };
 
   var onError = function (errorMessage) {
