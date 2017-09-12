@@ -20,10 +20,10 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Превышено время ожидания от сервера. Максимальное время: ' + xhr.timeout + 'мс');
+      onError('Превышено время ожидания от сервера. Максимальное время: ' + xhr.timeout / 1000 + 'с');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = 5000;
 
     return xhr;
   };

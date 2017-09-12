@@ -5,10 +5,30 @@
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
-  var drawPictures = function () {
-    pictures.appendChild(window.picture.getFragments());
+  var loadedData = null;
+  var onLoad = function (data) {
+    loadedData = data;
+    pictures.appendChild(window.picture.getFragments(loadedData));
   };
-  drawPictures();
+
+  var onError = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style.zIndex = '100';
+    node.style.margin = '0 auto';
+    node.style.textAlign = 'center';
+    node.style.background = '#FF0';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.top = '50%';
+    node.style.fontSize = '30px';
+    node.style.color = 'black';
+    node.style.border = '2px black solid';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.backend.load(onLoad, onError);
 
   // Функция открытия фото. Убирает класс hidden карточке с фотографией и добавляет обработчик закрытия на ESC
   var openPhoto = function (evt) {

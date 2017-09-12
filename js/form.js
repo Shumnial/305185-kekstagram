@@ -34,6 +34,9 @@
   var pinHandle = document.querySelector('.upload-effect-level-pin');
   var pinValue = document.querySelector('.upload-effect-level-val');
   var uploadEffectLevel = uploadOverlay.querySelector('.upload-effect-level');
+  var resizeControlsValue = document.querySelector('.upload-resize-controls-value');
+  var uploadEffectNone = uploadOverlay.querySelector('#upload-effect-none');
+
 
   // Открывает форму кадрирования
   var openUploadForm = function () {
@@ -155,13 +158,25 @@
     }
   };
 
+  var resetForm = function () {
+    imageHashtagsField.value = '';
+    imageDescrField.value = '';
+    resizeControlsValue.setAttribute('value', '100%');
+    uploadImageEffects.className = 'effect-image-preview';
+    uploadImageEffects.style.filter = 'none';
+    uploadImageEffects.style.transform = 'scale(1)';
+    pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + '%';
+    pinValue.style.width = pinHandle.style.left;
+    uploadEffectNone.checked = true;
+  };
+
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(uploadForm), function (response) {
+    window.backend.save(new FormData(uploadForm), function () {
       closeUploadForm();
+      resetForm();
     });
   });
-
 
   // Увеличивает-уменьшает изображение перед публикацией (scale)
   window.initializeScale(getResizeValue, 1, -1);

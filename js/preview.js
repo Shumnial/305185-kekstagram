@@ -12,7 +12,7 @@
       galleryCommentsCount.textContent = photoObjects.comments.length;
     },
 
-    // Сравниваем полученный url со значением свойства объекта
+    // Сравниваем полученный url со значением свойства объекта и возвращаем подходящий объект
     getPhotoObject: function (url) {
       var i = 0;
       while (url !== window.data[i].url) {
