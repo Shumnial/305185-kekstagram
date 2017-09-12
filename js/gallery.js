@@ -5,12 +5,11 @@
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
-  window.gallery = {
-    loadedData: null
-  };
+  var loadedData = null;
+
   var onLoad = function (data) {
-    window.gallery.loadedData = data;
-    pictures.appendChild(window.picture.getFragments(window.gallery.loadedData));
+    loadedData = data;
+    pictures.appendChild(window.picture.getFragments(loadedData));
   };
 
   var onError = function (errorMessage) {
@@ -73,7 +72,7 @@
       target = target.parentNode;
     }
     var photoUrl = target.children[0].getAttribute('src');
-    window.preview.showGalleryOverlay(window.preview.getPhotoObject(photoUrl));
+    window.preview.showGalleryOverlay(window.preview.getPhotoObject(photoUrl, loadedData));
   };
 
   // Обработчик открытия фото на ENTER, когда фото в фокусе

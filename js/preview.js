@@ -13,12 +13,12 @@
     },
 
     // Сравниваем полученный url со значением свойства объекта и возвращаем подходящий объект
-    getPhotoObject: function (url) {
+    getPhotoObject: function (url, data) {
       var i = 0;
-      while (url !== window.gallery.loadedData[i].url) {
+      while (url !== data[i].url) {
         i++;
       }
-      return window.gallery.loadedData[i];
+      return data[i];
     }
   };
 })();
