@@ -83,7 +83,7 @@
     window.preview.showGalleryOverlay(window.preview.getPhotoObject(photoUrl, loadedData));
   };
 
-  filtersContainer.addEventListener('click', function (evt) {
+  var switchFilters = function (evt) {
     picturesContainer.innerHTML = '';
     switch (evt.target) {
       case filterRecommend:
@@ -98,8 +98,13 @@
       case filterRandom:
         picturesContainer.appendChild(window.getFragment(sortRandom(loadedData)));
     }
-  });
+  };
 
+  filtersContainer.addEventListener('change', function (evt) {
+    window.debounce(function () {
+      switchFilters(evt);
+    });
+  });
   // Обработчик открытия фото на ENTER, когда фото в фокусе
   picturesContainer.addEventListener('keydown', onPhotoEnterPress);
 
