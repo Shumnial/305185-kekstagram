@@ -5,6 +5,25 @@
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
 
+  var filtersContainer = document.querySelector('.filters');
+  var filterRecommend = filtersContainer.querySelector('#filter-recommend');
+  var filterPopular = filtersContainer.querySelector('#filter-popular');
+  var filterDiscussed = filtersContainer.querySelector('#filter-discussed');
+  // var filterRandom = filtersContainer.querySelector('#filter-random');
+
+  var sortPopular = function (picturesArray) {
+    return picturesArray.slice().sort(function (first, second) {
+      return first.likes - second.likes;
+    });
+  };
+
+  var sortDiscussed = function (picturesArray) {
+    return picturesArray.slice().sort(function (left, right) {
+      return right.comments.length - left.comments.length;
+    });
+  };
+
+
   var loadedData = null;
 
   var onLoad = function (data) {
@@ -57,6 +76,20 @@
     var photoUrl = currentImage.children[0].getAttribute('src');
     window.preview.showGalleryOverlay(window.preview.getPhotoObject(photoUrl, loadedData));
   };
+
+  filtersContainer.addEventListener('click', function (evt) {
+    switch (evt.target) {
+      case filterRecommend:
+        picturesContainer.appendChild(window.getFragment(loadedData));
+        break;
+      case filterPopular:
+        picturesContainer.appendChild(window.getFragment(sortPopular(loadedData)));
+        break;
+      case filterDiscussed:
+        picturesContainer.appendChild(window.getFragment(sortDiscussed(loadedData)));
+        break;
+    }
+  });
 
   // Обработчик открытия фото на ENTER, когда фото в фокусе
   picturesContainer.addEventListener('keydown', onPhotoEnterPress);

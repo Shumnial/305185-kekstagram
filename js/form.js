@@ -36,7 +36,6 @@
   var uploadEffectLevel = uploadOverlay.querySelector('.upload-effect-level');
   var resizeControlsValue = document.querySelector('.upload-resize-controls-value');
   var uploadEffectNone = uploadOverlay.querySelector('#upload-effect-none');
-  var errorContainer = document.querySelector('.error-popup');
 
 
   // Открывает форму кадрирования
@@ -51,6 +50,7 @@
     uploadOverlay.classList.add('hidden');
     uploadImage.classList.remove('hidden');
     document.removeEventListener('keydown', onUploadFormEscPress);
+    window.error.closeError();
   };
 
   // Закрывает форму кадрирования на ESC
@@ -201,8 +201,6 @@
     onSubmitFormClick(imageHashtagsField);
     onSubmitFormClick(imageDescribeField);
   });
-// Закрытие сообщения об ошибке
-  errorContainer.addEventListener('click', window.error.closeError);
 
   // КОД РАБОТЫ С ПОЛЗУНКОМ
   pinHandle.addEventListener('mousedown', function (evt) {

@@ -23,7 +23,7 @@
       onError('Превышено время ожидания от сервера. Максимальное время: ' + xhr.timeout / 1000 + 'с');
     });
 
-    xhr.timeout = 5000;
+    xhr.timeout = 10000;
 
     return xhr;
   };

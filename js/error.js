@@ -21,8 +21,8 @@
 
   window.error = {
     popupError: function (errorMessage) {
-      node.classList.remove('hidden');
       node.textContent = errorMessage;
+      node.classList.remove('hidden');
     },
     closeError: function () {
       node.classList.add('hidden');
