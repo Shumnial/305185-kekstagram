@@ -20,11 +20,11 @@
   node.style.cursor = 'pointer';
 
   window.error = {
-    popupError: function (errorMessage) {
+    open: function (errorMessage) {
       node.textContent = errorMessage;
       node.classList.remove('hidden');
     },
-    closeError: function () {
+    close: function () {
       node.classList.add('hidden');
     }
   };
