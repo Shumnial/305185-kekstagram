@@ -2,7 +2,6 @@
 
 (function () {
   var filtersContainer = document.querySelector('.filters');
-  var filterRecommend = document.querySelector('.filter-recommend');
 
     // Добавляет изображения галереи, информацию о лайках и комментариях из шаблона в HTML-разметку
   window.getFragment = function (picturesData) {
