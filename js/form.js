@@ -43,7 +43,6 @@
     uploadOverlay.classList.remove('hidden');
     uploadImage.classList.add('hidden');
     document.addEventListener('keydown', onUploadFormEscPress);
-    uploadFile.removeEventListener('change', openUploadForm);
   };
 
   // Закрывает формы кадрирования
@@ -51,7 +50,6 @@
     uploadOverlay.classList.add('hidden');
     uploadImage.classList.remove('hidden');
     document.removeEventListener('keydown', onUploadFormEscPress);
-    uploadFile.addEventListener('change', openUploadForm);
   };
 
   // Закрывает форму кадрирования на ESC
