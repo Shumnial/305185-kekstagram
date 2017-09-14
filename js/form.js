@@ -171,12 +171,14 @@
     uploadEffectNone.checked = true;
   };
 
+  var closeAndResetForm = function () {
+    closeUploadForm();
+    resetForm();
+  };
+
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(uploadForm), function () {
-      closeUploadForm();
-      resetForm();
-    }, window.error.popupError);
+    window.backend.save(new FormData(uploadForm), closeAndResetForm(), window.error.popupError);
     uploadFile.value = '';
   });
 
