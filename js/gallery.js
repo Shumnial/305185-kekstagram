@@ -13,13 +13,13 @@
 
   var sortPopular = function (picturesArray) {
     return picturesArray.slice().sort(function (first, second) {
-      return first.likes - second.likes;
+      return second.likes - first.likes;
     });
   };
 
   var sortDiscussed = function (picturesArray) {
-    return picturesArray.slice().sort(function (left, right) {
-      return right.comments.length - left.comments.length;
+    return picturesArray.slice().sort(function (first, second) {
+      return second.comments.length - first.comments.length;
     });
   };
 
@@ -83,9 +83,11 @@
         picturesContainer.appendChild(window.getFragment(loadedData));
         break;
       case filterPopular:
+        picturesContainer.innerHTML = '';
         picturesContainer.appendChild(window.getFragment(sortPopular(loadedData)));
         break;
       case filterDiscussed:
+        picturesContainer.innerHTML = '';
         picturesContainer.appendChild(window.getFragment(sortDiscussed(loadedData)));
         break;
     }
