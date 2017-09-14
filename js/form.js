@@ -205,7 +205,10 @@
   // Изменяет текущий фильтр
   window.initializeFilters(onEffectPreviewClick);
   // Открывает форму кадрирования после загрузки фото
-  uploadFile.addEventListener('change', openUploadForm);
+  uploadFile.addEventListener('change', function (evt) {
+    openUploadForm();
+    uploadFile.value = '';
+  });
   // Закрывает форму кадрировании при клике по крестику
   uploadFormClose.addEventListener('click', closeUploadForm);
   // Закрывает форму кадрирования на Enter, когда крестик в фокусе
