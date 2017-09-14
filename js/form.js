@@ -36,6 +36,7 @@
   var uploadEffectLevel = uploadOverlay.querySelector('.upload-effect-level');
   var resizeControlsValue = document.querySelector('.upload-resize-controls-value');
   var uploadEffectNone = uploadOverlay.querySelector('#upload-effect-none');
+  var errorContainer = document.querySelector('.error-popup');
 
 
   // Открывает форму кадрирования
@@ -101,7 +102,7 @@
   };
 
   // Увеличение-уменьшение элемента
-  var getResizeValue = function (scaleElement, pictureElement, valueDirection) {
+  var resizeValue = function (scaleElement, pictureElement, valueDirection) {
     var defaultResizeValue = parseInt(scaleElement.getAttribute('value'), 10);
     var newResizeValue = defaultResizeValue + (scaleConstants.RESIZE_VALUE_STEP * valueDirection);
     if (newResizeValue >= scaleConstants.MIN_RESIZE_VALUE && newResizeValue <= scaleConstants.MAX_RESIZE_VALUE) {
@@ -170,35 +171,17 @@
     uploadEffectNone.checked = true;
   };
 
-// Сообщение при тех. ошибке и его визуальное оформление
-  var onError = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style.zIndex = '100';
-    node.style.margin = '0 auto';
-    node.style.textAlign = 'center';
-    node.style.background = '#FF0';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.top = '50%';
-    node.style.fontSize = '30px';
-    node.style.color = 'black';
-    node.style.border = '2px black solid';
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(uploadForm), function () {
       closeUploadForm();
       resetForm();
-    }, onError);
+    }, window.error.popupError);
     uploadFile.value = '';
   });
 
   // Увеличивает-уменьшает изображение перед публикацией (scale)
-  window.initializeScale(getResizeValue, 1, -1);
+  window.initializeScale(resizeValue, 1, -1);
   // Изменяет текущий фильтр
   window.initializeFilters(onEffectPreviewClick);
   // Открывает форму кадрирования после загрузки фото
@@ -216,6 +199,8 @@
     onSubmitFormClick(imageHashtagsField);
     onSubmitFormClick(imageDescribeField);
   });
+// Закрытие сообщения об ошибке
+  errorContainer.addEventListener('click', window.error.closeError);
 
   // КОД РАБОТЫ С ПОЛЗУНКОМ
   pinHandle.addEventListener('mousedown', function (evt) {
