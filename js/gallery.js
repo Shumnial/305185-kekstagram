@@ -9,7 +9,7 @@
   var filterRecommend = filtersContainer.querySelector('#filter-recommend');
   var filterPopular = filtersContainer.querySelector('#filter-popular');
   var filterDiscussed = filtersContainer.querySelector('#filter-discussed');
-  // var filterRandom = filtersContainer.querySelector('#filter-random');
+  var filterRandom = filtersContainer.querySelector('#filter-random');
 
   var sortPopular = function (picturesArray) {
     return picturesArray.slice().sort(function (first, second) {
@@ -20,6 +20,12 @@
   var sortDiscussed = function (picturesArray) {
     return picturesArray.slice().sort(function (first, second) {
       return second.comments.length - first.comments.length;
+    });
+  };
+
+  var sortRandom = function (picturesArray) {
+    return picturesArray.slice().sort(function () {
+      return 0.5 - Math.random();
     });
   };
 
@@ -78,18 +84,19 @@
   };
 
   filtersContainer.addEventListener('click', function (evt) {
+    picturesContainer.innerHTML = '';
     switch (evt.target) {
       case filterRecommend:
         picturesContainer.appendChild(window.getFragment(loadedData));
         break;
       case filterPopular:
-        picturesContainer.innerHTML = '';
         picturesContainer.appendChild(window.getFragment(sortPopular(loadedData)));
         break;
       case filterDiscussed:
-        picturesContainer.innerHTML = '';
         picturesContainer.appendChild(window.getFragment(sortDiscussed(loadedData)));
         break;
+      case filterRandom:
+        picturesContainer.appendChild(window.getFragment(sortRandom(loadedData)));
     }
   });
 
