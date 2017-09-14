@@ -43,6 +43,7 @@
     uploadOverlay.classList.remove('hidden');
     uploadImage.classList.add('hidden');
     document.addEventListener('keydown', onUploadFormEscPress);
+    uploadFile.removeEventListener('change', openUploadForm);
   };
 
   // Закрывает формы кадрирования
@@ -50,6 +51,7 @@
     uploadOverlay.classList.add('hidden');
     uploadImage.classList.remove('hidden');
     document.removeEventListener('keydown', onUploadFormEscPress);
+    uploadFile.addEventListener('change', openUploadForm);
   };
 
   // Закрывает форму кадрирования на ESC
@@ -137,18 +139,22 @@
         pictureElement.style.filter = 'none';
     }
   };
+// Вспомогательная функция для вычисления координат ползунка
+  var calculatePinPosition = function (pinPosition) {
+    pinHandle.style.left = pinPosition;
+    pinValue.style.width = pinHandle.style.left;
+  };
 
 // Изменяет  текущий фильр
   var currentEffect = null;
-  var onEffectPreviewClick = function (evt, pictureElement, pin, pinLevelValue, effectLevel) {
+  var onEffectPreviewClick = function (evt, pictureElement, effectLevel) {
     if (evt.target.tagName === 'INPUT') {
       var effectName = evt.target.value;
       uploadImageEffects.classList.remove(currentEffect);
       currentEffect = 'effect-' + effectName;
       pictureElement.classList.add(currentEffect);
       // Значения фильтра и ползунка по умолчанию
-      pin.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
-      pinLevelValue.style.width = pin.style.left;
+      calculatePinPosition(pinValues.DEFAULT_PIN_POSITION + 'px');
       if (currentEffect !== 'effect-none') {
         effectLevel.classList.remove('hidden');
       } else {
@@ -158,6 +164,7 @@
     }
   };
 
+// Сбрасывает поля формы по умолчанию
   var resetForm = function () {
     imageHashtagsField.value = '';
     imageDescrField.value = '';
@@ -165,9 +172,26 @@
     uploadImageEffects.className = 'effect-image-preview';
     uploadImageEffects.style.filter = 'none';
     uploadImageEffects.style.transform = 'scale(1)';
-    pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + '%';
-    pinValue.style.width = pinHandle.style.left;
+    calculatePinPosition(pinValues.DEFAULT_PIN_POSITION + 'px');
     uploadEffectNone.checked = true;
+  };
+
+// Сообщение при тех. ошибке и его визуальное оформление
+  var onError = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style.zIndex = '100';
+    node.style.margin = '0 auto';
+    node.style.textAlign = 'center';
+    node.style.background = '#FF0';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.top = '50%';
+    node.style.fontSize = '30px';
+    node.style.color = 'black';
+    node.style.border = '2px black solid';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
   };
 
   uploadForm.addEventListener('submit', function (evt) {
@@ -175,7 +199,7 @@
     window.backend.save(new FormData(uploadForm), function () {
       closeUploadForm();
       resetForm();
-    });
+    }, onError);
   });
 
   // Увеличивает-уменьшает изображение перед публикацией (scale)
@@ -214,9 +238,9 @@
       var scaleValue = pinHandle.offsetLeft - shift;
 
       if (pinHandle.offsetLeft - shift <= pinValues.MIN_PIN_POSITION) {
-        pinHandle.style.left = pinValues.MIN_PIN_POSITION + 'px';
+        calculatePinPosition(pinValues.MIN_PIN_POSITION + 'px');
       } else if (pinHandle.offsetLeft - shift >= pinValues.MAX_PIN_POSITION) {
-        pinHandle.style.left = pinValues.MAX_PIN_POSITION + 'px';
+        calculatePinPosition(pinValues.MAX_PIN_POSITION + 'px');
       } else {
         pinHandle.style.left = (scaleValue) + 'px';
       }

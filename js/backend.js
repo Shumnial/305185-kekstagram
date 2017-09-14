@@ -3,7 +3,7 @@
 (function () {
   var SERVER_URL = 'https://1510.dump.academy/kekstagram';
 
-  var someFunction = function (onLoad, onError) {
+  var getPicturesFromData = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -30,13 +30,13 @@
 
   window.backend = {
     save: function (data, onLoad, onError) {
-      var xhr = someFunction(onLoad, onError);
+      var xhr = getPicturesFromData(onLoad, onError);
 
       xhr.open('POST', SERVER_URL);
       xhr.send(data);
     },
     load: function (onLoad, onError) {
-      var xhr = someFunction(onLoad, onError);
+      var xhr = getPicturesFromData(onLoad, onError);
 
       xhr.open('GET', SERVER_URL + '/data');
       xhr.send();
