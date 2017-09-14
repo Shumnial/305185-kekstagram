@@ -51,6 +51,7 @@
     uploadImage.classList.remove('hidden');
     document.removeEventListener('keydown', onUploadFormEscPress);
     window.error.closeError();
+    uploadFile.value = '';
   };
 
   // Закрывает форму кадрирования на ESC
