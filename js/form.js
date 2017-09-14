@@ -27,8 +27,8 @@
   var uploadOverlay = uploadForm.querySelector('.upload-overlay');
   var uploadImage = uploadForm.querySelector('.upload-image');
   var uploadFormClose = uploadForm.querySelector('.upload-form-cancel');
-  var uploadImageEffects = uploadOverlay.querySelector('.effect-image-preview');
-  var imageDescrField = uploadOverlay.querySelector('.upload-form-description');
+  var uploadImageEffect = uploadOverlay.querySelector('.effect-image-preview');
+  var imageDescribeField = uploadOverlay.querySelector('.upload-form-description');
   var imageHashtagsField = uploadOverlay.querySelector('.upload-form-hashtags');
   var uploadSubmitForm = uploadOverlay.querySelector('.upload-form-submit');
   var pinHandle = document.querySelector('.upload-effect-level-pin');
@@ -67,13 +67,13 @@
   };
 
   // Минимальная и максимальная длина поля описания фотографии
-  var onImageDescrInput = function (evt) {
-    if (imageDescrField.value.length < formConstants.MIN_DESCR_LENGTH) {
-      imageDescrField.setCustomValidity('Комментарий должен содержать не менее 30 символов. Текущее количество : ' + imageDescrField.value.length);
-    } else if (imageDescrField.value.length > formConstants.MAX_DESCR_LENGTH) {
-      imageDescrField.setCustomValidity('Комментарий должен содержать не более 100 символов. Текущее количество : ' + imageDescrField.value.length);
+  var onImageDescribeInput = function (evt) {
+    if (imageDescribeField.value.length < formConstants.MIN_DESCR_LENGTH) {
+      imageDescribeField.setCustomValidity('Комментарий должен содержать не менее 30 символов. Текущее количество : ' + imageDescribeField.value.length);
+    } else if (imageDescribeField.value.length > formConstants.MAX_DESCR_LENGTH) {
+      imageDescribeField.setCustomValidity('Комментарий должен содержать не более 100 символов. Текущее количество : ' + imageDescribeField.value.length);
     } else {
-      imageDescrField.setCustomValidity('');
+      imageDescribeField.setCustomValidity('');
     }
   };
 
@@ -137,22 +137,18 @@
         pictureElement.style.filter = 'none';
     }
   };
-// Вспомогательная функция для вычисления координат ползунка
-  var calculatePinPosition = function (pinPosition) {
-    pinHandle.style.left = pinPosition;
-    pinValue.style.width = pinHandle.style.left;
-  };
 
 // Изменяет  текущий фильр
   var currentEffect = null;
   var onEffectPreviewClick = function (evt, pictureElement, effectLevel) {
     if (evt.target.tagName === 'INPUT') {
       var effectName = evt.target.value;
-      uploadImageEffects.classList.remove(currentEffect);
+      uploadImageEffect.classList.remove(currentEffect);
       currentEffect = 'effect-' + effectName;
       pictureElement.classList.add(currentEffect);
       // Значения фильтра и ползунка по умолчанию
-      calculatePinPosition(pinValues.DEFAULT_PIN_POSITION + 'px');
+      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
+      pinValue.style.width = pinHandle.style.left;
       if (currentEffect !== 'effect-none') {
         effectLevel.classList.remove('hidden');
       } else {
@@ -165,12 +161,12 @@
 // Сбрасывает поля формы по умолчанию
   var resetForm = function () {
     imageHashtagsField.value = '';
-    imageDescrField.value = '';
+    imageDescribeField.value = '';
     resizeControlsValue.setAttribute('value', '100%');
-    uploadImageEffects.className = 'effect-image-preview';
-    uploadImageEffects.style.filter = 'none';
-    uploadImageEffects.style.transform = 'scale(1)';
-    calculatePinPosition(pinValues.DEFAULT_PIN_POSITION + 'px');
+    uploadImageEffect.className = 'effect-image-preview';
+    uploadImageEffect.style.filter = 'none';
+    uploadImageEffect.style.transform = 'scale(1)';
+    pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
     uploadEffectNone.checked = true;
   };
 
@@ -198,6 +194,7 @@
       closeUploadForm();
       resetForm();
     }, onError);
+    uploadFile.value = '';
   });
 
   // Увеличивает-уменьшает изображение перед публикацией (scale)
@@ -205,22 +202,19 @@
   // Изменяет текущий фильтр
   window.initializeFilters(onEffectPreviewClick);
   // Открывает форму кадрирования после загрузки фото
-  uploadFile.addEventListener('change', function (evt) {
-    openUploadForm();
-    uploadFile.value = '';
-  });
+  uploadFile.addEventListener('change', openUploadForm);
   // Закрывает форму кадрировании при клике по крестику
   uploadFormClose.addEventListener('click', closeUploadForm);
   // Закрывает форму кадрирования на Enter, когда крестик в фокусе
   uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
 // Минимальное и максимальное значение символов в поле описания фотографии
-  imageDescrField.addEventListener('input', onImageDescrInput);
+  imageDescribeField.addEventListener('input', onImageDescribeInput);
 // Проверка валидности поля хэш-тегов
   imageHashtagsField.addEventListener('input', onImageHashtagsInput);
 // Подсвечивание невалидных полей красной рамкой
   uploadSubmitForm.addEventListener('click', function () {
     onSubmitFormClick(imageHashtagsField);
-    onSubmitFormClick(imageDescrField);
+    onSubmitFormClick(imageDescribeField);
   });
 
   // КОД РАБОТЫ С ПОЛЗУНКОМ
@@ -238,16 +232,16 @@
 
       var scaleValue = pinHandle.offsetLeft - shift;
 
-      if (pinHandle.offsetLeft - shift <= pinValues.MIN_PIN_POSITION) {
-        calculatePinPosition(pinValues.MIN_PIN_POSITION + 'px');
+      if (scaleValue <= pinValues.MIN_PIN_POSITION) {
+        pinHandle.style.left = pinValues.MIN_PIN_POSITION + 'px';
       } else if (pinHandle.offsetLeft - shift >= pinValues.MAX_PIN_POSITION) {
-        calculatePinPosition(pinValues.MAX_PIN_POSITION + 'px');
+        pinHandle.style.left = pinValues.MAX_PIN_POSITION + 'px';
       } else {
         pinHandle.style.left = (scaleValue) + 'px';
       }
       pinValue.style.width = pinHandle.style.left;
 
-      setFilterValue(scaleValue, uploadImageEffects);
+      setFilterValue(scaleValue, uploadImageEffect);
     };
 
     var onMouseUp = function (upEvt) {
