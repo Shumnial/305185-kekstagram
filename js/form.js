@@ -146,7 +146,7 @@
       currentEffect = 'effect-' + effectName;
       pictureElement.classList.add(currentEffect);
       pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
-      pinValue.style.width = pinHandle.style.left + 'px';
+      pinValue.style.width = pinHandle.style.left;
       if (currentEffect !== 'effect-none') {
         effectLevel.classList.remove('hidden');
       } else {
