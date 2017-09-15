@@ -4,21 +4,21 @@
   var galleryOverlayImage = document.querySelector('.gallery-overlay-image');
   var galleryLikesCount = document.querySelector('.likes-count');
   var galleryCommentsCount = document.querySelector('.comments-count');
-  window.preview = {
-  // Функция отрисовывает изображение и информацию о нем при увеличении фото
-    showGalleryOverlay: function (photoObjects) {
-      galleryOverlayImage.setAttribute('src', photoObjects.url);
-      galleryLikesCount.textContent = photoObjects.likes;
-      galleryCommentsCount.textContent = photoObjects.comments.length;
-    },
 
-    // Сравниваем полученный url со значением свойства объекта
-    getPhotoObject: function (url) {
-      var i = 0;
-      while (url !== window.data[i].url) {
-        i++;
-      }
-      return window.data[i];
+  // Сравниваем полученный url со значением свойства объекта и возвращаем подходящий объект
+  var getPhotoObject = function (url, data) {
+    var i = 0;
+    while (url !== data[i].url) {
+      i++;
     }
+    return data[i];
+  };
+
+  // Функция отрисовывает изображение и информацию о нем при увеличении фото
+  window.preview = function (url, data) {
+    var photoObject = getPhotoObject(url, data);
+    galleryOverlayImage.setAttribute('src', photoObject.url);
+    galleryLikesCount.textContent = photoObject.likes;
+    galleryCommentsCount.textContent = photoObject.comments.length;
   };
 })();
