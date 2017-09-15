@@ -50,7 +50,7 @@
     uploadOverlay.classList.add('hidden');
     uploadImage.classList.remove('hidden');
     document.removeEventListener('keydown', onUploadFormEscPress);
-    window.error.close();
+    window.error.hide();
     uploadFile.value = '';
   };
 
@@ -179,7 +179,7 @@
 
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(uploadForm), closeAndResetForm, window.error.open);
+    window.backend.save(new FormData(uploadForm), closeAndResetForm, window.error.show);
     uploadFile.value = '';
   });
 

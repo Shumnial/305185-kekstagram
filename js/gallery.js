@@ -37,7 +37,7 @@
     picturesContainer.appendChild(window.getFragment(loadedData));
   };
 
-  window.backend.load(onLoad, window.error.open);
+  window.backend.load(onLoad, window.error.show);
 
   // Функция открытия фото. Убирает класс hidden карточке с фотографией и добавляет обработчик закрытия на ESC
   var showGalleryOverlay = function (evt) {

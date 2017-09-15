@@ -20,11 +20,11 @@
   node.style.cursor = 'pointer';
 
   window.error = {
-    open: function (errorMessage) {
+    show: function (errorMessage) {
       node.textContent = errorMessage;
       node.classList.remove('hidden');
     },
-    close: function () {
+    hide: function () {
       node.classList.add('hidden');
     }
   };
