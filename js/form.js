@@ -69,7 +69,7 @@
   // Минимальная и максимальная длина поля описания фотографии
   var onImageDescribeInput = function (evt) {
     if (imageDescribeField.value.length > formConstants.MAX_DESCR_LENGTH) {
-      imageDescribeField.setCustomValidity('Комментарий должен содержать не более 100 символов. Текущее количество : ' + imageDescribeField.value.length);
+      imageDescribeField.setCustomValidity('Комментарий должен содержать не более 140 символов. Текущая длина : ' + imageDescribeField.value.length);
     } else {
       imageDescribeField.setCustomValidity('');
     }
