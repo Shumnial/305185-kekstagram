@@ -117,19 +117,19 @@
   var setFilterValue = function (value, pictureElement) {
     switch (currentEffect) {
       case 'effect-chrome':
-        pictureElement.style.filter = 'grayscale(' + (value) / pinValues.MAX_PIN_POSITION + ')';
+        pictureElement.style.filter = 'grayscale(' + value / pinValues.MAX_PIN_POSITION + ')';
         break;
       case 'effect-sepia':
-        pictureElement.style.filter = 'sepia(' + (value) / pinValues.MAX_PIN_POSITION + ')';
+        pictureElement.style.filter = 'sepia(' + value / pinValues.MAX_PIN_POSITION + ')';
         break;
       case 'effect-marvin':
         pictureElement.style.filter = 'invert(' + Math.floor((value) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
         break;
       case 'effect-phobos':
-        pictureElement.style.filter = 'blur(' + (value) * 3 / pinValues.MAX_PIN_POSITION + 'px)';
+        pictureElement.style.filter = 'blur(' + value * 3 / pinValues.MAX_PIN_POSITION + 'px)';
         break;
       case 'effect-heat':
-        pictureElement.style.filter = 'brightness(' + (value) * 3 / pinValues.MAX_PIN_POSITION + ')';
+        pictureElement.style.filter = 'brightness(' + value * 3 / pinValues.MAX_PIN_POSITION + ')';
         break;
       default:
         pictureElement.style.filter = 'none';
@@ -145,8 +145,8 @@
       uploadImageEffect.classList.remove(currentEffect);
       currentEffect = 'effect-' + effectName;
       pictureElement.classList.add(currentEffect);
-      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
-      pinValue.style.width = pinHandle.style.left;
+      pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
+      pinValue.style.width = pinHandle.style.left + 'px';
       if (currentEffect !== 'effect-none') {
         effectLevel.classList.remove('hidden');
       } else {
