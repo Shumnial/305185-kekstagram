@@ -3,7 +3,7 @@
 (function () {
   var filtersContainer = document.querySelector('.filters');
 
-    // Добавляет изображения галереи, информацию о лайках и комментариях из шаблона в HTML-разметку
+  // Добавляет изображения галереи, информацию о лайках и комментариях из шаблона в HTML-разметку
   window.getFragment = function (picturesData) {
     var fragment = document.createDocumentFragment();
     var template = document.querySelector('#picture-template').content;

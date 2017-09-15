@@ -4,7 +4,6 @@
   var picturesContainer = document.querySelector('.pictures');
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var galleryOverlayClose = document.querySelector('.gallery-overlay-close');
-
   var filtersContainer = document.querySelector('.filters');
   var filterRecommend = filtersContainer.querySelector('#filter-recommend');
   var filterPopular = filtersContainer.querySelector('#filter-popular');
@@ -29,9 +28,7 @@
     });
   };
 
-
   var loadedData = null;
-
   var onLoad = function (data) {
     loadedData = data;
     picturesContainer.appendChild(window.getFragment(loadedData));
@@ -72,17 +69,21 @@
     }
   };
 
+  // Определяет, на картинку ли пришелся клик, поднимаясь до родителя элемента
   var onPhotoClick = function (evt) {
-    showGalleryOverlay();
-    var currentImage = evt.target;
-    evt.preventDefault();
-    while (!currentImage.classList.contains('picture')) {
-      currentImage = currentImage.parentNode;
+    if (evt.target !== picturesContainer) {
+      showGalleryOverlay();
+      var currentImage = evt.target;
+      evt.preventDefault();
+      while (!currentImage.classList.contains('picture')) {
+        currentImage = currentImage.parentNode;
+      }
+      var photoUrl = currentImage.children[0].getAttribute('src');
+      window.preview.showGalleryOverlay(window.preview.getPhotoObject(photoUrl, loadedData));
     }
-    var photoUrl = currentImage.children[0].getAttribute('src');
-    window.preview.showGalleryOverlay(window.preview.getPhotoObject(photoUrl, loadedData));
   };
 
+  // Переключает сортировку фотографий
   var switchFilters = function (evt) {
     picturesContainer.innerHTML = '';
     switch (evt.target) {
@@ -100,20 +101,20 @@
     }
   };
 
-  filtersContainer.addEventListener('change', function (evt) {
-    window.debounce(function () {
-      switchFilters(evt);
-    });
+  // Обработчик переключения сортировочных фильтров
+  filtersContainer.addEventListener('click', function (evt) {
+    if (evt.target.tagName === 'INPUT') {
+      window.debounce(function () {
+        switchFilters(evt);
+      });
+    }
   });
   // Обработчик открытия фото на ENTER, когда фото в фокусе
   picturesContainer.addEventListener('keydown', onPhotoEnterPress);
-
   // Обработчик закрытия фото на клик по крестику
   galleryOverlayClose.addEventListener('click', hideGalleryOverlay);
-
   // Обработчик закрытия фото на ENTER, когда "крестик" в фокусе
   galleryOverlayClose.addEventListener('keydown', onCrossEnterPress);
-
   // Отменяет привычное поведение ссылок
   // Открывает увеличенное изображение при клике на уменьшенное
   // Получает данные атрибута src при клике на img

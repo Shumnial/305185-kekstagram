@@ -21,7 +21,7 @@
 
   window.error = {
     show: function (errorMessage) {
-      node.textContent = errorMessage;
+      node.textContent = (errorMessage[0] && errorMessage[0].errorMessage) ? errorMessage[0] && errorMessage[0].errorMessage : errorMessage;
       node.classList.remove('hidden');
     },
     hide: function () {
