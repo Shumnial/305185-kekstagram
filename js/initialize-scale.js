@@ -11,6 +11,7 @@
     resizeControlInc.addEventListener('click', function () {
       resizeCallback(resizeControlsValue, uploadImageEffect, increaseValue);
     });
+
     // Уменьшает изображение на 25%
     resizeControlDec.addEventListener('click', function () {
       resizeCallback(resizeControlsValue, uploadImageEffect, decreaseValue);

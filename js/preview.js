@@ -5,6 +5,7 @@
   var galleryLikesCount = document.querySelector('.likes-count');
   var galleryCommentsCount = document.querySelector('.comments-count');
   window.preview = {
+
     // Функция отрисовывает изображение и информацию о нем при увеличении фото
     showGalleryOverlay: function (photoObjects, url, data) {
       galleryOverlayImage.setAttribute('src', photoObjects.url);

@@ -10,24 +10,29 @@
   var filterDiscussed = filtersContainer.querySelector('#filter-discussed');
   var filterRandom = filtersContainer.querySelector('#filter-random');
 
+
+  // Сортировка по количеству лайков
   var sortPopular = function (picturesArray) {
     return picturesArray.slice().sort(function (first, second) {
       return second.likes - first.likes;
     });
   };
 
+  // Сортировка по количеству комменттариев
   var sortDiscussed = function (picturesArray) {
     return picturesArray.slice().sort(function (first, second) {
       return second.comments.length - first.comments.length;
     });
   };
 
+  // Случайная сортировка
   var sortRandom = function (picturesArray) {
     return picturesArray.slice().sort(function () {
       return 0.5 - Math.random();
     });
   };
 
+  // Добавляет фотографии с сервера
   var loadedData = null;
   var onLoad = function (data) {
     loadedData = data;
@@ -69,7 +74,7 @@
     }
   };
 
-  // Определяет, на картинку ли пришелся клик, поднимаясь до родителя элемента
+  // Определяет, на картинку ли пришелся клик, поднимаясь до родителя элемента. Получает данные атрибута src при клике на img
   var onPhotoClick = function (evt) {
     if (evt.target !== picturesContainer) {
       showGalleryOverlay();
@@ -109,14 +114,17 @@
       });
     }
   });
+
   // Обработчик открытия фото на ENTER, когда фото в фокусе
   picturesContainer.addEventListener('keydown', onPhotoEnterPress);
+
   // Обработчик закрытия фото на клик по крестику
   galleryOverlayClose.addEventListener('click', hideGalleryOverlay);
+
   // Обработчик закрытия фото на ENTER, когда "крестик" в фокусе
   galleryOverlayClose.addEventListener('keydown', onCrossEnterPress);
+
   // Отменяет привычное поведение ссылок
   // Открывает увеличенное изображение при клике на уменьшенное
-  // Получает данные атрибута src при клике на img
   picturesContainer.addEventListener('click', onPhotoClick);
 })();

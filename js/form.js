@@ -145,7 +145,6 @@
       uploadImageEffect.classList.remove(currentEffect);
       currentEffect = 'effect-' + effectName;
       pictureElement.classList.add(currentEffect);
-      // Значения фильтра и ползунка по умолчанию
       pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION;
       pinValue.style.width = pinHandle.style.left;
       if (currentEffect !== 'effect-none') {
@@ -181,25 +180,34 @@
     window.backend.save(new FormData(uploadForm), closeAndResetForm, window.error.show);
     uploadFile.value = '';
   });
+
   // Увеличивает-уменьшает изображение перед публикацией (scale)
   window.initializeScale(resizeValue, 1, -1);
+
   // Изменяет текущий фильтр
   window.initializeFilters(onEffectPreviewClick);
+
   // Открывает форму кадрирования после загрузки фото
   uploadFile.addEventListener('change', openUploadForm);
+
   // Закрывает форму кадрировании при клике по крестику
   uploadFormClose.addEventListener('click', closeUploadForm);
+
   // Закрывает форму кадрирования на Enter, когда крестик в фокусе
   uploadFormClose.addEventListener('keydown', onUploadFormCloseEnterPress);
+
   // Минимальное и максимальное значение символов в поле описания фотографии
   imageDescribeField.addEventListener('input', onImageDescribeInput);
+
   // Проверка валидности поля хэш-тегов
   imageHashtagsField.addEventListener('input', onImageHashtagsInput);
+
   // Подсвечивание невалидных полей красной рамкой
   uploadSubmitForm.addEventListener('click', function () {
     onSubmitFormClick(imageHashtagsField);
     onSubmitFormClick(imageDescribeField);
   });
+
   // КОД РАБОТЫ С ПОЛЗУНКОМ
   pinHandle.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
