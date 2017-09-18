@@ -91,8 +91,9 @@
     if (hashtagsList.length > formConstants.MAX_HASHTAGS_AMOUNT) {
       imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
     } else if (imageHashtagsField.value !== '') {
+
+      // В данном случае цикл for был оставлен для наглядности (для поиска дубликатов использован метод массива sort)
       hashtagsList.sort();
-      // В данном случае цикл for был оставлен для наглядности
       for (var i = 0; i < hashtagsList.length; i++) {
         if (hashtagsList[i].charAt(0) !== '#') {
           imageHashtagsField.setCustomValidity('Хэш-теги должны начинаться со знака решетки (#)');
