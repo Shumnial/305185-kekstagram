@@ -92,17 +92,18 @@
       imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
     } else if (imageHashtagsField.value !== '') {
       hashtagsList.sort();
-      hashtagsList.forEach(function (hashtagsField) {
-        if (hashtagsField.charAt(0) !== '#') {
+      // В данном случае цикл for был оставлен для наглядности
+      for (var i = 0; i < hashtagsList.length; i++) {
+        if (hashtagsList[i].charAt(0) !== '#') {
           imageHashtagsField.setCustomValidity('Хэш-теги должны начинаться со знака решетки (#)');
-        } else if (hashtagsField.indexOf('#', 2) > 0) {
+        } else if (hashtagsList[i].indexOf('#', 2) > 0) {
           imageHashtagsField.setCustomValidity('Хэш-теги должны разделяться пробелом');
-        } else if (hashtagsField.length > 20) {
+        } else if (hashtagsList[i].length > 20) {
           imageHashtagsField.setCustomValidity('Название хэш-тегов не может превышать 20 символов');
-        } else if (hashtagsField && hashtagsField === hashtagsField) {
+        } else if (hashtagsList[i + 1] && hashtagsList[i] === hashtagsList[i + 1]) {
           imageHashtagsField.setCustomValidity('Хэш-теги не должны повторяться!');
         }
-      });
+      }
     }
   };
 
