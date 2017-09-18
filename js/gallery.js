@@ -84,7 +84,7 @@
         currentImage = currentImage.parentNode;
       }
       var photoUrl = currentImage.children[0].getAttribute('src');
-      window.preview(photoUrl, loadedData);
+      window.preview.update(photoUrl, loadedData);
     }
   };
 

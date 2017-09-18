@@ -21,6 +21,14 @@
     DEFAULT_PIN_POSITION: 455 * 0.20
   };
 
+  var filtersConstants = {
+    CHROME: 'effect-chrome',
+    SEPIA: 'effect-sepia',
+    MARVIN: 'effect-marvin',
+    PHOBOS: 'effect-phobos',
+    HEAT: 'effect-heat'
+  };
+
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFile = uploadForm.querySelector('#upload-file');
   var uploadOverlay = uploadForm.querySelector('.upload-overlay');
@@ -68,13 +76,13 @@
 
   // Минимальная и максимальная длина поля описания фотографии
   var onImageDescribeInput = function (evt) {
+    imageDescribeField.setCustomValidity('');
     if (imageDescribeField.value.length > formConstants.MAX_DESCR_LENGTH) {
-      imageDescribeField.setCustomValidity('Комментарий должен содержать не более 140 символов. Текущая длина : ' + imageDescribeField.value.length);
-    } else {
-      imageDescribeField.setCustomValidity('');
+      imageDescribeField.setCustomValidity('Комментарий должен содержать не более 140 символов. Текущая длина: ' + imageDescribeField.value.length);
     }
   };
 
+  // Атрибут accept не был добавлен из-за слабой поддержки. Проверка типа файла есть на сервере. Для предупреждения пользователя мы выводим errorMesage
   // Проверка правильности заполнения поля хэш-тегов
   var onImageHashtagsInput = function () {
     var hashtagsValue = imageHashtagsField.value.trim();
@@ -82,7 +90,7 @@
     imageHashtagsField.setCustomValidity('');
     if (hashtagsList.length > formConstants.MAX_HASHTAGS_AMOUNT) {
       imageHashtagsField.setCustomValidity('Количество хэш-тегов не может быть больше 5');
-    } else {
+    } else if (imageHashtagsField.value !== '') {
       hashtagsList.sort();
       for (var i = 0; i < hashtagsList.length; i++) {
         if (hashtagsList[i].charAt(0) !== '#') {
@@ -116,19 +124,19 @@
   // Изменяет значение текущего фильтра
   var setFilterValue = function (value, pictureElement) {
     switch (currentEffect) {
-      case 'effect-chrome':
+      case filtersConstants.CHROME:
         pictureElement.style.filter = 'grayscale(' + value / pinValues.MAX_PIN_POSITION + ')';
         break;
-      case 'effect-sepia':
+      case filtersConstants.SEPIA:
         pictureElement.style.filter = 'sepia(' + value / pinValues.MAX_PIN_POSITION + ')';
         break;
-      case 'effect-marvin':
+      case filtersConstants.MARVIN:
         pictureElement.style.filter = 'invert(' + Math.floor((value) * 100 / pinValues.MAX_PIN_POSITION) + '%)';
         break;
-      case 'effect-phobos':
+      case filtersConstants.PHOBOS:
         pictureElement.style.filter = 'blur(' + value * 3 / pinValues.MAX_PIN_POSITION + 'px)';
         break;
-      case 'effect-heat':
+      case filtersConstants.HEAT:
         pictureElement.style.filter = 'brightness(' + value * 3 / pinValues.MAX_PIN_POSITION + ')';
         break;
       default:
@@ -166,6 +174,7 @@
     uploadImageEffect.style.transform = 'scale(1)';
     pinHandle.style.left = pinValues.DEFAULT_PIN_POSITION + 'px';
     uploadEffectNone.checked = true;
+    uploadFile.value = '';
   };
 
   // Вспомогательная функция. Закрывает и сбрасывает поля формы
@@ -178,7 +187,6 @@
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(uploadForm), closeAndResetForm, window.error.show);
-    uploadFile.value = '';
   });
 
   // Увеличивает-уменьшает изображение перед публикацией (scale)
