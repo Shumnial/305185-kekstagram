@@ -202,7 +202,7 @@ body {
 
   position: absolute;
   top: 0;
-  left: 100%;
+  left: 97%;
   margin-left: 10px;
 
   border: 0;
@@ -859,4 +859,19 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 
 .footer-social-item-vk {
   background-position: -84px 0;
+}
+
+.error-popup {
+  position: fixed;
+  font-size: 30px;
+  color: black;
+  text-align: center;
+  top: 0;
+  left: 0%;
+  width: 98%;
+  z-index: 100;
+  padding: 10px;
+  border: 2px black solid;
+  background-color: #FF0;
+  cursor: pointer;
 }

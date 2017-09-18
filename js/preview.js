@@ -15,10 +15,12 @@
   };
 
   // Функция отрисовывает изображение и информацию о нем при увеличении фото
-  window.preview = function (url, data) {
-    var photoObject = getPhotoObject(url, data);
-    galleryOverlayImage.setAttribute('src', photoObject.url);
-    galleryLikesCount.textContent = photoObject.likes;
-    galleryCommentsCount.textContent = photoObject.comments.length;
+  window.preview = {
+    update: function (url, data) {
+      var photoObject = getPhotoObject(url, data);
+      galleryOverlayImage.setAttribute('src', photoObject.url);
+      galleryLikesCount.textContent = photoObject.likes;
+      galleryCommentsCount.textContent = photoObject.comments.length;
+    }
   };
 })();
